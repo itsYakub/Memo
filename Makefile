@@ -1,6 +1,8 @@
 CXX = g++
 CXXFLAGS = -Wall -Werror -Wextra -std=c++20
 
+DEBUGGER = gdb
+
 IXXFLAGS = -Iinclude -Ilib/raylib/lib
 LDFLAGS = -Llib/raylib/lib
 LXXFLAGS = -lraylib -lm -ldl -lpthread -lGL 
