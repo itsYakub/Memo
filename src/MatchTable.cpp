@@ -37,10 +37,10 @@ MatchTable::MatchTable(const MatchTableDifficulty difficulty) {
     std::copy(table.begin(), table.end(), this->m_MatchTable.begin());
 }
 
-void MatchTableProcessInput(MatchTable& table) {
+void MatchTableProcessInput(MatchTable& table, Vector2 mouse_position) {
     if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && table.GetSelectedCount() < 2) {
         for(auto& i : table.GetTable()) {
-            if(CheckCollisionPointRec(GetMousePosition(), (Rectangle) { (float) i.GetPosition().x, (float) i.GetPosition().y, (float) i.GetWidth(), (float) i.GetHeight()})) {
+            if(CheckCollisionPointRec(mouse_position, (Rectangle) { (float) i.GetPosition().x, (float) i.GetPosition().y, (float) i.GetWidth(), (float) i.GetHeight()})) {
                 if(i.GetPickState()) {
                     break;
                 }

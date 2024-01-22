@@ -2,19 +2,18 @@
 
 #include "MatchTableObject.hpp"
 #include "MatchTable.hpp"
+#include "Window.hpp"
 
 int main(int, char**) {
-    SetConfigFlags(FLAG_VSYNC_HINT);
-    SetTraceLogLevel(LOG_NONE);
-    InitWindow(640, 640, "Raylib-5.0.0 - Match Game - v.1.0.0");
-    
-    MatchTable match_table(DIFFICULTY_EASY);
+    Window window = Window();
+    MatchTable match_table = MatchTable(DIFFICULTY_EASY);
 
     while (!WindowShouldClose()) {
         
         /* Update */
 
-        MatchTableProcessInput(match_table);
+        window.WindowUpdate();
+        MatchTableProcessInput(match_table, window.GetVirtualMousePosition());
 
         if(IsKeyPressed(KEY_R)) {
             match_table = MatchTable(DIFFICULTY_EASY);
@@ -22,7 +21,7 @@ int main(int, char**) {
 
         /* Render */
 
-        BeginDrawing();
+        window.RendererBegin();
 
         ClearBackground(RAYWHITE);
 
@@ -30,10 +29,10 @@ int main(int, char**) {
             i.Render();
         }
 
-        EndDrawing();
+        window.RendererEnd();
+        
+        window.WindowDraw();
     }
-
-    CloseWindow();
 
     return(0);
 }
