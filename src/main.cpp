@@ -1,17 +1,18 @@
-#include "raylib.h"
-
 #include "Window.hpp"
+#include "MatchTable.hpp"
 
+#include "Scene.hpp"
+#include "SceneMenager.hpp"
 #include "SceneGameplay.hpp"
 
 class Game {
 private:
-    Window window = Window();
-    SceneGameplay scene_gameplay = SceneGameplay();
+    Window& window = Window::Get();
+    SceneGameplay gameplay = SceneGameplay(DIFFICULTY_EASY);
 
 public:
     Game() {
-        scene_gameplay.Init(&window);
+        SceneMenager::Get().LoadScene(&gameplay);
 
         while(!window.ShouldClose()) {
             Update();
@@ -22,15 +23,13 @@ public:
 private:
     void Update() {
         window.Update();
-        scene_gameplay.Update();
+        SceneMenager::Get().UpdateScene();
     }
 
     void Render() {
         window.RendererBegin();
-
-        window.Clear(RAYWHITE);
         
-        scene_gameplay.Render();
+        SceneMenager::Get().RenderScene();
 
         window.RendererEnd();
 

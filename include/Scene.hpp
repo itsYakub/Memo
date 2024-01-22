@@ -4,9 +4,11 @@
 
 class Scene {
 public:
-    virtual void Init(Window* window) = 0;
-    virtual void Destroy() = 0;
+    Scene() = default;
 
-    virtual void Update() = 0; /* Function called every frame: only for updating functionality */
-    virtual void Render() = 0; /* Function called every frame: only for rendering functionality */
+    virtual void Init() { };
+    virtual void Destroy() { };
+
+    virtual void Update() { } /* Function called every frame: only for updating functionality */
+    virtual void Render() { } /* Function called every frame: only for rendering functionality */
 };

@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Werror -Wextra -std=c++20
+CXXFLAGS = -Wall -Wextra -std=c++20
 
 DEBUGGER = gdb
 

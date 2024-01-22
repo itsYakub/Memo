@@ -1,10 +1,16 @@
 #include "SceneGameplay.hpp"
 
-#include "MatchTable.hpp"
+#include "raylib.h"
 
-void SceneGameplay::Init(Window* window) {
-    this->m_MatchTable = MatchTable(DIFFICULTY_EASY);
-    this->window = window;
+#include "MatchTable.hpp"
+#include "Window.hpp"
+
+SceneGameplay::SceneGameplay(const MatchTableDifficulty difficulty) {
+    this->m_MatchTable = MatchTable(difficulty);
+}
+
+void SceneGameplay::Init() {
+    Window::Get().SetRendererBackgroundColor(245, 245, 245);
 }
 
 void SceneGameplay::Destroy() {
@@ -12,11 +18,15 @@ void SceneGameplay::Destroy() {
 }
 
 void SceneGameplay::Update() {
-    m_MatchTable.MatchTableProcessInput(window->GetVirtualMousePosition());
+    this->m_MatchTable.MatchTableProcessInput(Window::Get().GetVirtualMousePosition());
+
+    if(IsKeyPressed(KEY_R)) {
+        this->m_MatchTable = MatchTable(DIFFICULTY_EASY);
+    }
 }
 
 void SceneGameplay::Render() {
-    for(auto& i : m_MatchTable.GetTable()) {
+    for(auto& i : this->m_MatchTable.GetTable()) {
         i.Render();
     }
 }
