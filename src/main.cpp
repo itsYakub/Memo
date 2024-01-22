@@ -1,38 +1,45 @@
 #include "raylib.h"
 
-#include "MatchTableObject.hpp"
-#include "MatchTable.hpp"
 #include "Window.hpp"
 
-int main(int, char**) {
+#include "SceneGameplay.hpp"
+
+class Game {
+private:
     Window window = Window();
-    MatchTable match_table = MatchTable(DIFFICULTY_EASY);
+    SceneGameplay scene_gameplay = SceneGameplay();
 
-    while (!WindowShouldClose()) {
-        
-        /* Update */
+public:
+    Game() {
+        scene_gameplay.Init(&window);
 
-        window.WindowUpdate();
-        MatchTableProcessInput(match_table, window.GetVirtualMousePosition());
-
-        if(IsKeyPressed(KEY_R)) {
-            match_table = MatchTable(DIFFICULTY_EASY);
+        while(!window.ShouldClose()) {
+            Update();
+            Render();
         }
+    }
 
-        /* Render */
+private:
+    void Update() {
+        window.Update();
+        scene_gameplay.Update();
+    }
 
+    void Render() {
         window.RendererBegin();
 
-        ClearBackground(RAYWHITE);
-
-        for(auto& i : match_table.GetTable()) {
-            i.Render();
-        }
+        window.Clear(RAYWHITE);
+        
+        scene_gameplay.Render();
 
         window.RendererEnd();
-        
-        window.WindowDraw();
+
+        window.Draw();
     }
+};
+
+int main(int, char**) {
+    Game game = Game();
 
     return(0);
 }

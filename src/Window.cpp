@@ -15,11 +15,11 @@ Window::Window() {
 
     SetTraceLogLevel(LOG_NONE);
 
-    InitWindow(1024, 786, "Raylib 5.0.0 - Match Game - Version 1.0.0 ( 60FPS )");
+    InitWindow(1024, 786, "Raylib 5.0.0 - Match Game - Version 1.0.0");
 
     SetExitKey(0);
 
-    this->m_RendererTarget = LoadRenderTexture(640, 480);
+    this->m_RendererTarget = LoadRenderTexture(800, 600);
 
     this->m_WindowWidth = GetScreenWidth();
     this->m_WindowHeight = GetScreenHeight();
@@ -28,16 +28,14 @@ Window::Window() {
     this->m_VirtualScreenHeight = m_RendererTarget.texture.height;
 
     this->m_VirtualMousePosition = Vector2 { 0, 0 };
-
 }
+
 Window::~Window() {
     UnloadRenderTexture(m_RendererTarget);
     CloseWindow();
 }
 
-void Window::WindowUpdate() {
-    SetWindowTitle(TextFormat("Raylib 5.0.0 - Match Game - Version 1.0.0 ( %iFPS )", GetFPS));
-
+void Window::Update() {
     m_WindowWidth = GetScreenWidth();
     m_WindowHeight = GetScreenHeight();
 
@@ -45,7 +43,7 @@ void Window::WindowUpdate() {
     m_VirtualMousePosition.y = (GetMousePosition().y - (m_WindowHeight - (m_VirtualScreenHeight * GetBufferScaling(*this))) * 0.5f) / GetBufferScaling(*this);
 }
 
-void Window::WindowDraw() {
+void Window::Draw() {
     BeginDrawing();
     
     ClearBackground(BLACK);

@@ -22,6 +22,7 @@ private:
     Timer m_DeselectTimer;
     
 public:
+    MatchTable() { }
     MatchTable(const MatchTableDifficulty difficulty);
     
     inline std::vector<MatchTableObject>& GetTable() { return m_MatchTable; }
@@ -31,6 +32,6 @@ public:
     inline void SetSelectedCount(int value) { m_SelectCount = value; }
 
     inline Timer& GetDeselectTimer() { return m_DeselectTimer; }
-};
 
-void MatchTableProcessInput(MatchTable& table, Vector2 mouse_position);
+    void MatchTableProcessInput(Vector2 mouse_position);
+};

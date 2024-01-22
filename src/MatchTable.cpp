@@ -37,9 +37,9 @@ MatchTable::MatchTable(const MatchTableDifficulty difficulty) {
     std::copy(table.begin(), table.end(), this->m_MatchTable.begin());
 }
 
-void MatchTableProcessInput(MatchTable& table, Vector2 mouse_position) {
-    if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && table.GetSelectedCount() < 2) {
-        for(auto& i : table.GetTable()) {
+void MatchTable::MatchTableProcessInput(Vector2 mouse_position) {
+    if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && m_SelectCount < 2) {
+        for(auto& i : m_MatchTable) {
             if(CheckCollisionPointRec(mouse_position, (Rectangle) { (float) i.GetPosition().x, (float) i.GetPosition().y, (float) i.GetWidth(), (float) i.GetHeight()})) {
                 if(i.GetPickState()) {
                     break;
@@ -48,40 +48,40 @@ void MatchTableProcessInput(MatchTable& table, Vector2 mouse_position) {
                 else if(i.GetSelectState()) {
                     i.Deselect();
 
-                    table.SetSelectedCount(table.GetSelectedCount() - 1);
+                    m_SelectCount--;
 
                     break;
                 }
 
                 i.Select();
                 
-                table.GetSelectedCount() == 0 ? table.GetSelectedPair().first = i.GetIndex() : table.GetSelectedPair().second = i.GetIndex();
-                table.SetSelectedCount(table.GetSelectedCount() + 1);
+                m_SelectCount == 0 ? m_SelectedElements.first = i.GetIndex() : m_SelectedElements.second = i.GetIndex();
+                m_SelectCount++;
             }
         }
     }
 
-    if(table.GetSelectedCount() >= 2) {
-        auto& match_table_first = table.GetTable()[table.GetSelectedPair().first];
-        auto& match_table_second = table.GetTable()[table.GetSelectedPair().second];
+    if(GetSelectedCount() >= 2) {
+        auto& match_table_first = m_MatchTable[m_SelectedElements.first];
+        auto& match_table_second = m_MatchTable[m_SelectedElements.second];
 
-        table.GetDeselectTimer().TimerProcess();
+        m_DeselectTimer.TimerProcess();
 
         if(match_table_first.GetID() == match_table_second.GetID()) {
             match_table_first.Pick();
             match_table_second.Pick();
 
-            table.SetSelectedCount(0);
+            m_SelectCount = 0;
         }
 
         else {
-            if(table.GetDeselectTimer().TimerFinished()) {
+            if(m_DeselectTimer.TimerFinished()) {
                 match_table_first.Deselect();
                 match_table_second.Deselect();
 
-                table.SetSelectedCount(0);
+                m_SelectCount = 0;
 
-                table.GetDeselectTimer() = Timer(0.5f);
+                m_DeselectTimer = Timer(0.5f);
             }
         }
     }
