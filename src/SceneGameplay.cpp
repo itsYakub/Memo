@@ -4,9 +4,12 @@
 
 #include "MatchTable.hpp"
 #include "Window.hpp"
+#include "Debug.hpp"
 
 SceneGameplay::SceneGameplay(const MatchTableDifficulty difficulty) {
     this->m_MatchTable = MatchTable(difficulty);
+
+    Debug::Log("Created the gameplay scene");
 }
 
 void SceneGameplay::Init() {
@@ -18,7 +21,7 @@ void SceneGameplay::Destroy() {
 }
 
 void SceneGameplay::Update() {
-    this->m_MatchTable.MatchTableProcessInput(Window::Get().GetVirtualMousePosition());
+    this->m_MatchTable.MatchTableProcessInput();
 
     if(IsKeyPressed(KEY_R)) {
         this->m_MatchTable = MatchTable(DIFFICULTY_EASY);

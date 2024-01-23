@@ -2,6 +2,8 @@
 
 #include "raylib.h"
 
+#include "Debug.hpp"
+
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) <( b) ? (a) : (b))
 
@@ -19,7 +21,9 @@ Window::Window() {
 
     SetExitKey(0);
 
-    this->m_RendererTarget = LoadRenderTexture(800, 600);
+    Debug::Log("Window instance created successfully");
+
+    this->m_RendererTarget = LoadRenderTexture(1024, 786);
 
     this->m_WindowWidth = GetScreenWidth();
     this->m_WindowHeight = GetScreenHeight();
@@ -31,6 +35,8 @@ Window::Window() {
 }
 
 Window::~Window() {
+    Debug::Log("Closing window...");
+
     UnloadRenderTexture(m_RendererTarget);
     CloseWindow();
 }
@@ -41,6 +47,9 @@ void Window::Update() {
 
     m_VirtualMousePosition.x = (GetMousePosition().x - (m_WindowWidth - (m_VirtualScreenWidth * GetBufferScaling(*this))) * 0.5f) / GetBufferScaling(*this);
     m_VirtualMousePosition.y = (GetMousePosition().y - (m_WindowHeight - (m_VirtualScreenHeight * GetBufferScaling(*this))) * 0.5f) / GetBufferScaling(*this);
+
+    SetMouseOffset(-(m_WindowWidth - (m_VirtualScreenWidth * GetBufferScaling(*this))) * 0.5f, -(m_WindowHeight - (m_VirtualScreenHeight * GetBufferScaling(*this))) * 0.5f);
+    SetMouseScale(1 / GetBufferScaling(*this), 1 / GetBufferScaling(*this));
 }
 
 void Window::Draw() {

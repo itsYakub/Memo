@@ -1,14 +1,12 @@
 #pragma once
 
-#include "MatchTable.hpp"
 #include "Scene.hpp"
 
-class SceneGameplay : public Scene {
+class SceneMainMenu : public Scene {
 private:
-    MatchTable m_MatchTable;
 
 public:
-    SceneGameplay(const MatchTableDifficulty difficulty);
+    SceneMainMenu();
     void Init() override;
     void Destroy() override;
     void Update() override;

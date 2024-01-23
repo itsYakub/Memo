@@ -6,8 +6,8 @@ class SceneMenager {
 private:
     Scene* m_CurrentScene;
 
-    SceneMenager() = default;
-    ~SceneMenager() = default;
+    SceneMenager();
+    ~SceneMenager();
 public:
     static SceneMenager& Get() { static SceneMenager instance; return instance; }
 

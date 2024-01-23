@@ -3,8 +3,8 @@ CXXFLAGS = -Wall -Wextra -std=c++20
 
 DEBUGGER = gdb
 
-IXXFLAGS = -Iinclude -Ilib/raylib/lib
-LDFLAGS = -Llib/raylib/lib
+IXXFLAGS = -Iinclude -Ilib/libraylib -Ilib/raygui/src
+LDFLAGS = -Llib/libraylib
 LXXFLAGS = -lraylib -lm -ldl -lpthread -lGL 
 
 SRC = $(wildcard src/*.cpp)

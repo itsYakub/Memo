@@ -6,6 +6,7 @@
 
 #include "MatchTableObject.hpp"
 #include "Timer.hpp"
+#include "Debug.hpp"
 
 MatchTable::MatchTable(const MatchTableDifficulty difficulty) {
     this->m_MatchTable = std::vector<MatchTableObject>(difficulty);
@@ -13,34 +14,28 @@ MatchTable::MatchTable(const MatchTableDifficulty difficulty) {
     this->m_SelectCount = 0;
     this->m_DeselectTimer = Timer(0.5f);
 
-    std::vector<int> table_values = std::vector<int>(difficulty); /* Generating the initial values for a table */
-    for(int i = 0; i < (int)table_values.size(); i++) {
-        int random_value = 0;
-
-        do {
-            random_value = GetRandomValue(1, (int) table_values.size() / 2);
-        } while(std::count(table_values.begin(), table_values.end(), random_value) >= 2);
-
-        table_values[i] = random_value;
-    }
-    
-    std::vector<MatchTableObject> table = std::vector<MatchTableObject>(difficulty); /* The main match table */
+    std::vector<int> values = std::vector<int>(difficulty); 
     for(int i = 0; i < (int) sqrt(difficulty); i++) {
         for(int j = 0; j < (int) sqrt(difficulty); j++) {
             int index = j + i * sqrt(difficulty);
-            auto& table_object = table[index];
+            int random_value = 0;
 
-            table_object = MatchTableObject((Vector2){(float) (j * table_object.GetWidth() + 10 * j), (float) (i * table_object.GetHeight() + 10 * i)}, table_values[index], index);
+            do {
+                random_value = GetRandomValue(1, (int) m_MatchTable.size() / 2);
+            } while(std::count(values.begin(), values.end(), random_value) >= 2);
+
+            values[index] = random_value;
+            m_MatchTable[index] = MatchTableObject((Vector2){(float) (j * m_MatchTable[index].GetWidth() + 10 * j), (float) (i * m_MatchTable[index].GetHeight() + 10 * i)}, random_value, index);
         }
     }
 
-    std::copy(table.begin(), table.end(), this->m_MatchTable.begin());
+    Debug::Log("Match table created successfully");
 }
 
-void MatchTable::MatchTableProcessInput(Vector2 mouse_position) {
+void MatchTable::MatchTableProcessInput() {
     if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && m_SelectCount < 2) {
         for(auto& i : m_MatchTable) {
-            if(CheckCollisionPointRec(mouse_position, (Rectangle) { (float) i.GetPosition().x, (float) i.GetPosition().y, (float) i.GetWidth(), (float) i.GetHeight()})) {
+            if(CheckCollisionPointRec(GetMousePosition(), (Rectangle) { (float) i.GetPosition().x, (float) i.GetPosition().y, (float) i.GetWidth(), (float) i.GetHeight()})) {
                 if(i.GetPickState()) {
                     break;
                 }

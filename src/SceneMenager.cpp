@@ -2,6 +2,16 @@
 
 #include "Scene.hpp"
 
+SceneMenager::SceneMenager() {
+
+}
+
+SceneMenager::~SceneMenager() {
+    UnloadScene();
+}
+
+
+
 void SceneMenager::LoadScene(Scene* scene) {
         if(m_CurrentScene != nullptr) UnloadScene();
 
@@ -11,7 +21,7 @@ void SceneMenager::LoadScene(Scene* scene) {
 
 void SceneMenager::UnloadScene() {
     m_CurrentScene->Destroy();
-    m_CurrentScene = nullptr;
+    delete m_CurrentScene;
 }
 
 void SceneMenager::UpdateScene() {

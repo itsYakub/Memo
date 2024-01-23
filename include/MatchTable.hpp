@@ -33,5 +33,5 @@ public:
 
     inline Timer& GetDeselectTimer() { return m_DeselectTimer; }
 
-    void MatchTableProcessInput(Vector2 mouse_position);
+    void MatchTableProcessInput();
 };

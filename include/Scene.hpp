@@ -5,6 +5,7 @@
 class Scene {
 public:
     Scene() = default;
+    virtual ~Scene() { };
 
     virtual void Init() { };
     virtual void Destroy() { };

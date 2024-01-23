@@ -17,8 +17,8 @@ private:
     Color m_RendererColor;
 
     Window();
-public:
     ~Window();
+public:
 
     static Window& Get() { static Window instance; return instance; }
 
