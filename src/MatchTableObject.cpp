@@ -1,5 +1,9 @@
 #include "MatchTableObject.hpp"
+
 #include "raylib.h"
+
+#include "Window.hpp"
+#include "Debug.hpp"
 
 MatchTableObject::MatchTableObject(Vector2 position, int ID, int index) {
     this->m_Position = position;
@@ -32,17 +36,24 @@ void MatchTableObject::Pick() {
 }
 
 void MatchTableObject::Render() {
-    Color color_object = GREEN;
-    Color color_letters = BLACK;
+    if(!GetSelectState() && !GetPickState()) {
+        int text_length_w = MeasureTextEx(GetFontDefault(), TextFormat("%c", '?'), GetFontDefault().baseSize, 2.0f).x;
+        int text_length_h = MeasureTextEx(GetFontDefault(), TextFormat("%c", '?'), GetFontDefault().baseSize, 2.0f).y;
 
-    if(GetPickState()) {
-        color_object = Fade(GREEN, 0.5f);
-        color_letters = Fade(BLACK, 0.5f);
+        DrawRectangle(m_Position.x, m_Position.y, WIDTH, HEIGHT, RED);
+        DrawRectangleLines(m_Position.x, m_Position.y, WIDTH, HEIGHT, MAROON);
+        DrawText(TextFormat("%c", '?'), m_Position.x + WIDTH * 0.5f - text_length_w * 0.5f, m_Position.y + HEIGHT * 0.5f - text_length_h * 0.5f, GetFontDefault().baseSize, BLACK);
     }
 
-    DrawRectangle(this->m_Position.x, this->m_Position.y, MatchTableObject::M_WIDTH, MatchTableObject::M_HEIGHT, color_object);
+    if(GetSelectState()) {
+        int text_length_w = MeasureTextEx(GetFontDefault(), TextFormat("%i", m_ID), GetFontDefault().baseSize, 2.0f).x;
+        int text_length_h = MeasureTextEx(GetFontDefault(), TextFormat("%i", m_ID), GetFontDefault().baseSize, 2.0f).y;
 
-    if(GetSelectState() || GetPickState()) {
-        DrawText(TextFormat("%i", this->m_ID), this->m_Position.x, this->m_Position.y, 32, color_letters);
+        DrawRectangleLines(m_Position.x, m_Position.y, WIDTH, HEIGHT, LIGHTGRAY);
+        DrawText(TextFormat("%i", m_ID), m_Position.x + WIDTH * 0.5f - text_length_w * 0.5f, m_Position.y + HEIGHT * 0.5f - text_length_h * 0.5f, GetFontDefault().baseSize, BLACK);
     }
+}
+
+void MatchTableObject::Unload() {
+
 }

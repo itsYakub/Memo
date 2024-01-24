@@ -3,14 +3,17 @@
 
 #include "Debug.hpp"
 
-#include "Scene.hpp"
 #include "SceneMenager.hpp"
 #include "SceneMainMenu.hpp"
+
+#include "SoundMenager.hpp"
+
 
 class Game {
 private:
     Window& window = Window::Get();
     SceneMenager& scene_menager = SceneMenager::Get();
+    SoundMenager& sound_menager = SoundMenager::Get();
 
 public:
     Game() {
@@ -44,7 +47,7 @@ private:
 };
 
 int main(int, char**) {
-    Game game = Game();
+    Game();
 
     return(0);
 }

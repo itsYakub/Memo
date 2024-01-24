@@ -1,19 +1,19 @@
 #include "SceneMenager.hpp"
 
 #include "Scene.hpp"
+#include "Debug.hpp"
 
 SceneMenager::SceneMenager() {
-
+    Debug::Log("Scene Menager loaded successfully");
 }
 
 SceneMenager::~SceneMenager() {
+    Debug::Log("Closing Sound Menager...");
     UnloadScene();
 }
 
-
-
 void SceneMenager::LoadScene(Scene* scene) {
-        if(m_CurrentScene != nullptr) UnloadScene();
+    if(m_CurrentScene != nullptr) UnloadScene();
 
         m_CurrentScene = scene;
         m_CurrentScene->Init();

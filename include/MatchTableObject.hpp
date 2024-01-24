@@ -6,9 +6,6 @@ class MatchTableObject {
 private:
     Vector2 m_Position;
 
-    const static int M_WIDTH = 64;
-    const static int M_HEIGHT = 96;
-
     bool m_IsSelected;
     bool m_IsPicked;
 
@@ -16,14 +13,15 @@ private:
     int m_Index;
 
 public:
+    const static int SPACING = 1;
+    const static int WIDTH = 24;
+    const static int HEIGHT = 32;
+
     MatchTableObject() { };
     MatchTableObject(const MatchTableObject&) = delete;
     MatchTableObject(Vector2 position, int ID, int index);
 
     inline Vector2 GetPosition() { return m_Position; }
-
-    inline int GetWidth() { return M_WIDTH; }
-    inline int GetHeight() { return M_HEIGHT; }
 
     inline bool GetSelectState() { return m_IsSelected; }
     void Select();
@@ -36,4 +34,6 @@ public:
     inline int GetIndex() { return m_Index; }
 
     void Render();
+
+    void Unload();
 };

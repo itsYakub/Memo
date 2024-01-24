@@ -15,15 +15,13 @@ Window::Window() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     SetConfigFlags(FLAG_VSYNC_HINT);
 
-    SetTraceLogLevel(LOG_NONE);
-
-    InitWindow(1024, 786, "Raylib 5.0.0 - Match Game - Version 1.0.0");
+    InitWindow(1280, 960, "Raylib 5.0.0 - Match Game - Version 1.0.0");
 
     SetExitKey(0);
 
     Debug::Log("Window instance created successfully");
 
-    this->m_RendererTarget = LoadRenderTexture(1024, 786);
+    this->m_RendererTarget = LoadRenderTexture(384, 284);
 
     this->m_WindowWidth = GetScreenWidth();
     this->m_WindowHeight = GetScreenHeight();
@@ -32,6 +30,8 @@ Window::Window() {
     this->m_VirtualScreenHeight = m_RendererTarget.texture.height;
 
     this->m_VirtualMousePosition = Vector2 { 0, 0 };
+
+    this->close_callback = false;
 }
 
 Window::~Window() {

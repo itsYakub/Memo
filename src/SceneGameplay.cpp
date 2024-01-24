@@ -1,10 +1,14 @@
 #include "SceneGameplay.hpp"
 
 #include "raylib.h"
+#include "raygui.h"
 
 #include "MatchTable.hpp"
 #include "Window.hpp"
 #include "Debug.hpp"
+
+#include "SceneMenager.hpp"
+#include "SceneMainMenu.hpp"
 
 SceneGameplay::SceneGameplay(const MatchTableDifficulty difficulty) {
     this->m_MatchTable = MatchTable(difficulty);
@@ -17,7 +21,11 @@ void SceneGameplay::Init() {
 }
 
 void SceneGameplay::Destroy() {
+    for(auto& i : m_MatchTable.GetTable()) {
+        i.Unload();
+    }
 
+    Debug::Log("Closing the gameplay scene...");
 }
 
 void SceneGameplay::Update() {
@@ -31,5 +39,9 @@ void SceneGameplay::Update() {
 void SceneGameplay::Render() {
     for(auto& i : this->m_MatchTable.GetTable()) {
         i.Render();
+    }
+
+    if(GuiButton(Rectangle{ Window::Get().GetRendererSize().x - 20.0f, 4.0f, 16.0f, 16.0f }, GuiIconText(ICON_EXIT, nullptr))) {
+        SceneMenager::Get().LoadScene(new SceneMainMenu());
     }
 }

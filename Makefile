@@ -8,6 +8,7 @@ LDFLAGS = -Llib/libraylib
 LXXFLAGS = -lraylib -lm -ldl -lpthread -lGL 
 
 SRC = $(wildcard src/*.cpp)
+OBJ = $(patsubst src/%.cpp, bin/%.obj, $(SRC))
 
 TARGET = bin/program.out
 
@@ -15,11 +16,15 @@ TARGET = bin/program.out
 
 all: $(TARGET)
 
-$(TARGET): $(SRC)
-	$(CXX) $(CXXFLAGS) $(IXXFLAGS) $(LDFLAGS) $^ -o $@ $(LXXFLAGS)
+$(TARGET): $(OBJ)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LXXFLAGS)
+
+$(OBJ): bin/%.obj: src/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(IXXFLAGS) 
 
 run:
 	./$(TARGET)
 
 clear:
+	rm -rf $(OBJ)
 	rm -rf $(TARGET)

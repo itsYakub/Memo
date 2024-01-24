@@ -16,6 +16,8 @@ private:
 
     Color m_RendererColor;
 
+    bool close_callback;
+
     Window();
     ~Window();
 public:
@@ -24,12 +26,11 @@ public:
 
     inline Vector2 GetVirtualMousePosition() { return m_VirtualMousePosition; }
 
-    inline Vector2 GetWindowSize() { return (Vector2){ (float) m_WindowWidth, (float) m_WindowHeight }; }
-    inline Vector2 GetWindowCenter() { return (Vector2) { GetWindowSize().x / 2, GetWindowSize().y / 2 }; }
     inline Vector2 GetRendererSize() { return (Vector2){ (float) m_VirtualScreenWidth, (float) m_VirtualScreenHeight }; }
     inline Vector2 GetRendererCenter() { return (Vector2) { GetRendererSize().x / 2, GetRendererSize().y / 2 }; }
     
-    inline bool ShouldClose() { return WindowShouldClose(); }
+    inline bool ShouldClose() { return WindowShouldClose() || close_callback; }
+    inline void CloseCallback() { close_callback = true; }
 
     void Update();
 

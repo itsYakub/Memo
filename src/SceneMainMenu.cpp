@@ -7,6 +7,8 @@
 #include "SceneGameplay.hpp"
 #include "SceneMenager.hpp"
 
+#include "SoundMenager.hpp"
+
 SceneMainMenu::SceneMainMenu() {
     Debug::Log("Created the main menu scene");
 }
@@ -24,15 +26,19 @@ void SceneMainMenu::Update() {
 }
 
 void SceneMainMenu::Render() {
-    if(GuiButton(Rectangle { 0, 0, 200, 50 }, "Play Easy")) {
+    if(GuiButton(Rectangle { 0, 0, 100, 25 }, "Play Easy")) {
         SceneMenager::Get().LoadScene(new SceneGameplay(DIFFICULTY_EASY));
     } 
 
-    if(GuiButton(Rectangle { 0, 100, 200, 50 }, "Play Normal")) {
+    if(GuiButton(Rectangle { 0, 50, 100, 25 }, "Play Normal")) {
         SceneMenager::Get().LoadScene(new SceneGameplay(DIFFICULTY_NORMAL));
     } 
 
-    if(GuiButton(Rectangle { 0, 200, 200, 50 }, "Play Hard")) {
+    if(GuiButton(Rectangle { 0, 100, 100, 25 }, "Play Hard")) {
         SceneMenager::Get().LoadScene(new SceneGameplay(DIFFICULTY_HARD));
     }     
+
+    if(GuiButton(Rectangle { 0, 150, 100, 25}, "Quit")) {
+        Window::Get().CloseCallback();
+    }
 }

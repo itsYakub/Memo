@@ -2,19 +2,24 @@
 
 #include <vector>
 #include <utility>
+#include <cmath>
+
+#include "raylib.h"
 
 #include "MatchTableObject.hpp"
 #include "Timer.hpp"
 
 enum MatchTableDifficulty {
     DIFFICULTY_EASY = 16,
-    DIFFICULTY_NORMAL = 64,
-    DIFFICULTY_HARD = 256
+    DIFFICULTY_NORMAL = 36,
+    DIFFICULTY_HARD = 64
 };
 
 class MatchTable {
 private:
     std::vector<MatchTableObject> m_MatchTable;
+
+    MatchTableDifficulty m_Difficulty;
 
     std::pair<int, int> m_SelectedElements;
     int m_SelectCount;
@@ -32,6 +37,8 @@ public:
     inline void SetSelectedCount(int value) { m_SelectCount = value; }
 
     inline Timer& GetDeselectTimer() { return m_DeselectTimer; }
+
+    inline Vector2 GetTableArea() { return { ((float) sqrt(m_Difficulty) * MatchTableObject::WIDTH) + ((float) (sqrt(m_Difficulty) - 1) * 10), ((float) sqrt(m_Difficulty) * MatchTableObject::HEIGHT) + ((float) (sqrt(m_Difficulty) - 1) * 10) }; }
 
     void MatchTableProcessInput();
 };
