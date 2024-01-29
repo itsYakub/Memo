@@ -1,5 +1,7 @@
 #include "SceneMainMenu.hpp"
 
+#include <memory>
+
 #include "raylib.h"
 #include "raygui.h"
 
@@ -7,14 +9,13 @@
 #include "SceneGameplay.hpp"
 #include "SceneMenager.hpp"
 
-#include "SoundMenager.hpp"
-
 SceneMainMenu::SceneMainMenu() {
     Debug::Log("Created the main menu scene");
 }
 
 void SceneMainMenu::Init() {
     Window::Get().SetRendererBackgroundColor(245, 245, 245);
+    m_MainMenuState = STATE_DEFAULT;
 }
 
 void SceneMainMenu::Destroy() {
@@ -26,19 +27,38 @@ void SceneMainMenu::Update() {
 }
 
 void SceneMainMenu::Render() {
-    if(GuiButton(Rectangle { 0, 0, 100, 25 }, "Play Easy")) {
-        SceneMenager::Get().LoadScene(new SceneGameplay(DIFFICULTY_EASY));
-    } 
+    Window& window = Window::Get();
+    SceneMenager& scene_menager = SceneMenager::Get();
 
-    if(GuiButton(Rectangle { 0, 50, 100, 25 }, "Play Normal")) {
-        SceneMenager::Get().LoadScene(new SceneGameplay(DIFFICULTY_NORMAL));
-    } 
+    switch(m_MainMenuState) {
+        case STATE_DEFAULT:
+            if(GuiButton(Rectangle { window.GetRendererCenter().x - 64, window.GetRendererCenter().y, 128, 24 }, GuiIconText(ICON_PLAYER_PLAY, "Play"))) {
+                m_MainMenuState = STATE_LEVEL_CHOOSING;
+            } 
 
-    if(GuiButton(Rectangle { 0, 100, 100, 25 }, "Play Hard")) {
-        SceneMenager::Get().LoadScene(new SceneGameplay(DIFFICULTY_HARD));
-    }     
+            if(GuiButton(Rectangle { window.GetRendererCenter().x - 64, window.GetRendererCenter().y + 32, 128, 24 }, GuiIconText(ICON_EXIT, "Quit"))) {
+                window.CloseCallback();
+            } 
 
-    if(GuiButton(Rectangle { 0, 150, 100, 25}, "Quit")) {
-        Window::Get().CloseCallback();
+            break;
+
+        case STATE_LEVEL_CHOOSING:
+            if(GuiButton(Rectangle { window.GetRendererCenter().x - 64, window.GetRendererCenter().y - 32, 128, 24 }, GuiIconText(ICON_PLAYER_PLAY, "Easy"))) {
+                scene_menager.LoadScene(std::make_unique<SceneGameplay>(DIFFICULTY_EASY));
+            } 
+
+            if(GuiButton(Rectangle { window.GetRendererCenter().x - 64, window.GetRendererCenter().y, 128, 24 }, GuiIconText(ICON_PLAYER_PLAY, "Normal"))) {
+                scene_menager.LoadScene(std::make_unique<SceneGameplay>(DIFFICULTY_NORMAL));
+            } 
+
+            if(GuiButton(Rectangle { window.GetRendererCenter().x - 64, window.GetRendererCenter().y + 32, 128, 24 }, GuiIconText(ICON_PLAYER_PLAY, "Hard"))) {
+                scene_menager.LoadScene(std::make_unique<SceneGameplay>(DIFFICULTY_HARD));
+            } 
+
+            if(GuiButton(Rectangle { window.GetRendererCenter().x - 64, window.GetRendererCenter().y + 64, 128, 24 }, GuiIconText(ICON_RESTART, "Back"))) {
+                m_MainMenuState = STATE_DEFAULT;
+            } 
+
+            break;
     }
 }

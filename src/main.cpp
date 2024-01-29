@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "Window.hpp"
 #include "MatchTable.hpp"
 
@@ -8,18 +10,23 @@
 
 #include "SoundMenager.hpp"
 
+#include "ResourceMenager.hpp"
 
 class Game {
 private:
     Window& window = Window::Get();
     SceneMenager& scene_menager = SceneMenager::Get();
     SoundMenager& sound_menager = SoundMenager::Get();
+    ResourceMenager& resource_menager = ResourceMenager::Get();
 
 public:
     Game() {
         Debug::Log("Game instance created successfully");
 
-        scene_menager.LoadScene(new SceneMainMenu());
+        // resource_menager.InsertTexture(LoadTexture("res/txt/table_card_back.png"), "table_card_back");
+        // resource_menager.InsertTexture(LoadTexture("res/txt/table_card_front.png"), "table_card_front");
+
+        scene_menager.LoadScene(std::make_unique<SceneMainMenu>());
 
         while(!window.ShouldClose()) {
             Update();

@@ -7,7 +7,7 @@
 SoundMenager::SoundMenager() {
     InitAudioDevice();
 
-    Debug::Log("Sound Menager loaded successfully");
+    Debug::Log("Sound Menager initialized successfully");
 }
 
 SoundMenager::~SoundMenager() {

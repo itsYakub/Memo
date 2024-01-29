@@ -5,15 +5,10 @@
 #include "Window.hpp"
 #include "Debug.hpp"
 
-MatchTableObject::MatchTableObject(Vector2 position, int ID, int index) {
-    this->m_Position = position;
+#include "ResourceMenager.hpp"
 
-    this->m_IsSelected = false;
-    this->m_IsPicked = false;
+MatchTableObject::MatchTableObject(Vector2 position, int ID, int index) : m_Position(position), m_IsSelected(false), m_IsPicked(false), m_ID(ID), m_Index(index) {
 
-    this->m_ID = ID;
-
-    this->m_Index = index;
 }
 
 void MatchTableObject::Select() {
@@ -49,11 +44,8 @@ void MatchTableObject::Render() {
         int text_length_w = MeasureTextEx(GetFontDefault(), TextFormat("%i", m_ID), GetFontDefault().baseSize, 2.0f).x;
         int text_length_h = MeasureTextEx(GetFontDefault(), TextFormat("%i", m_ID), GetFontDefault().baseSize, 2.0f).y;
 
+        DrawRectangle(m_Position.x, m_Position.y, WIDTH, HEIGHT, WHITE);
         DrawRectangleLines(m_Position.x, m_Position.y, WIDTH, HEIGHT, LIGHTGRAY);
         DrawText(TextFormat("%i", m_ID), m_Position.x + WIDTH * 0.5f - text_length_w * 0.5f, m_Position.y + HEIGHT * 0.5f - text_length_h * 0.5f, GetFontDefault().baseSize, BLACK);
     }
-}
-
-void MatchTableObject::Unload() {
-
 }

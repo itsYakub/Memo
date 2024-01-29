@@ -1,17 +1,19 @@
 #pragma once
 
+#include <memory>
+
 #include "Scene.hpp"
 
 class SceneMenager {
 private:
-    Scene* m_CurrentScene;
+    std::unique_ptr<Scene> m_CurrentScene;
 
     SceneMenager();
     ~SceneMenager();
 public:
     static SceneMenager& Get() { static SceneMenager instance; return instance; }
 
-    void LoadScene(Scene* scene);
+    void LoadScene(std::unique_ptr<Scene> scene);
     void UnloadScene();
     void UpdateScene();
     void RenderScene();

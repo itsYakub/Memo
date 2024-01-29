@@ -17,8 +17,6 @@ public:
     const static int WIDTH = 24;
     const static int HEIGHT = 32;
 
-    MatchTableObject() { };
-    MatchTableObject(const MatchTableObject&) = delete;
     MatchTableObject(Vector2 position, int ID, int index);
 
     inline Vector2 GetPosition() { return m_Position; }
@@ -34,6 +32,4 @@ public:
     inline int GetIndex() { return m_Index; }
 
     void Render();
-
-    void Unload();
 };

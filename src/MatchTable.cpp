@@ -9,20 +9,11 @@
 #include "Timer.hpp"
 #include "Debug.hpp"
 
-MatchTable::MatchTable(const MatchTableDifficulty difficulty) {
-    this->m_MatchTable = std::vector<MatchTableObject>(difficulty);
-
-    this->m_Difficulty = difficulty;
-
-    this->m_SelectedElements = std::pair<int, int>(0, 0);
-    this->m_SelectCount = 0;
-
-    this->m_DeselectTimer = Timer(0.5f);
-
+MatchTable::MatchTable(const MatchTableDifficulty difficulty) : m_MatchTable(), m_Difficulty(difficulty), m_SelectedElements(std::pair<int, int>(0, 0)), m_SelectCount(0), m_DeselectTimer(0.4f) {
     const int diff_value = difficulty;
     const int diff_value_sqrt = sqrt(difficulty);
 
-    std::vector<int> values = std::vector<int>(diff_value); 
+    std::vector<int> values = std::vector<int>(difficulty);
     for(int i = 0; i < diff_value_sqrt; i++) {
         for(int j = 0; j < diff_value_sqrt; j++) {
             int index = j + i * diff_value_sqrt;
@@ -38,11 +29,22 @@ MatchTable::MatchTable(const MatchTableDifficulty difficulty) {
             /* Formula: position at (0,0) + the center of the screen - the half of the size of the whole table */
             position.x = (float) (j * MatchTableObject::WIDTH + MatchTableObject::SPACING * j) + (Window::Get().GetRendererCenter().x) - (0.5f * (diff_value_sqrt * MatchTableObject::WIDTH + (diff_value_sqrt - 1) * MatchTableObject::SPACING));
             position.y = (float) (i * MatchTableObject::HEIGHT + MatchTableObject::SPACING * i) + (Window::Get().GetRendererCenter().y) - (0.5f * (diff_value_sqrt * MatchTableObject::HEIGHT + (diff_value_sqrt - 1) * MatchTableObject::SPACING));
-            m_MatchTable[index] = MatchTableObject(position, random_value, index);
+
+            m_MatchTable.push_back(MatchTableObject(position, random_value, index));
         }
     }
 
     Debug::Log("Match table created successfully");
+}
+
+bool MatchTable::GetCompleteState() {
+    for(auto i : m_MatchTable) {
+        if(!i.GetPickState()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void MatchTable::MatchTableProcessInput() {
@@ -82,15 +84,13 @@ void MatchTable::MatchTableProcessInput() {
             m_SelectCount = 0;
         }
 
-        else {
-            if(m_DeselectTimer.TimerFinished()) {
-                match_table_first.Deselect();
-                match_table_second.Deselect();
+        else if(m_DeselectTimer.TimerFinished()) {
+            match_table_first.Deselect();
+            match_table_second.Deselect();
 
-                m_SelectCount = 0;
+            m_SelectCount = 0;
 
-                m_DeselectTimer = Timer(0.5f);
-            }
+            m_DeselectTimer = Timer(0.4f);
         }
     }
 }

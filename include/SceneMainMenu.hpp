@@ -4,6 +4,12 @@
 
 class SceneMainMenu : public Scene {
 private:
+    enum MainMenuState { 
+        STATE_DEFAULT = 0,
+        STATE_LEVEL_CHOOSING
+    };
+
+    MainMenuState m_MainMenuState;
 
 public:
     SceneMainMenu();

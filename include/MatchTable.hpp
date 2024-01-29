@@ -27,12 +27,16 @@ private:
     Timer m_DeselectTimer;
     
 public:
-    MatchTable() { }
+    MatchTable() = delete;
     MatchTable(const MatchTableDifficulty difficulty);
-    
-    inline std::vector<MatchTableObject>& GetTable() { return m_MatchTable; }
-    inline std::pair<int, int>& GetSelectedPair() { return m_SelectedElements; }
 
+    inline int GetDifficultyValue() { return m_Difficulty; }
+
+    inline std::vector<MatchTableObject>& GetTable() { return m_MatchTable; }
+
+    bool GetCompleteState();
+
+    inline std::pair<int, int>& GetSelectedPair() { return m_SelectedElements; }
     inline int GetSelectedCount() { return m_SelectCount; }
     inline void SetSelectedCount(int value) { m_SelectCount = value; }
 

@@ -1,6 +1,7 @@
 #include "Window.hpp"
 
 #include "raylib.h"
+#include "raygui.h"
 
 #include "Debug.hpp"
 
@@ -15,13 +16,15 @@ Window::Window() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     SetConfigFlags(FLAG_VSYNC_HINT);
 
-    InitWindow(1280, 960, "Raylib 5.0.0 - Match Game - Version 1.0.0");
+    InitWindow(1280, 960, "Raylib 5.0.0 - Memo - Version 1.0.0");
 
     SetExitKey(0);
 
+    GuiLoadStyleDefault();
+
     Debug::Log("Window instance created successfully");
 
-    this->m_RendererTarget = LoadRenderTexture(384, 284);
+    this->m_RendererTarget = LoadRenderTexture(400, 300); 
 
     this->m_WindowWidth = GetScreenWidth();
     this->m_WindowHeight = GetScreenHeight();
