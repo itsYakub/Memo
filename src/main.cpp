@@ -6,7 +6,7 @@
 #include "Debug.hpp"
 
 #include "SceneMenager.hpp"
-#include "SceneMainMenu.hpp"
+#include "SceneSplashScreen.hpp"
 
 #include "SoundMenager.hpp"
 
@@ -23,10 +23,11 @@ public:
     Game() {
         Debug::Log("Game instance created successfully");
 
+        // TODO: Fix textures ASAP
         // resource_menager.InsertTexture(LoadTexture("res/txt/table_card_back.png"), "table_card_back");
         // resource_menager.InsertTexture(LoadTexture("res/txt/table_card_front.png"), "table_card_front");
 
-        scene_menager.LoadScene(std::make_unique<SceneMainMenu>());
+        scene_menager.LoadScene(std::make_unique<SceneSplashScreen>());
 
         while(!window.ShouldClose()) {
             Update();

@@ -1,8 +1,10 @@
 #pragma once
 
+#include <array>
+
 #include "Scene.hpp"
 
-class SceneMainMenu : public Scene {
+class SceneMainMenu : public Scene {    
 private:
     enum MainMenuState { 
         STATE_DEFAULT = 0,

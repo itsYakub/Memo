@@ -21,6 +21,8 @@ Window::Window() {
     SetExitKey(0);
 
     GuiLoadStyleDefault();
+    GuiEnableTooltip();
+    GuiLoadIcons("res/rguiicons/icon_set.rgi", true);
 
     Debug::Log("Window instance created successfully");
 
@@ -39,6 +41,8 @@ Window::Window() {
 
 Window::~Window() {
     Debug::Log("Closing window...");
+
+    GuiDisableTooltip();
 
     UnloadRenderTexture(m_RendererTarget);
     CloseWindow();

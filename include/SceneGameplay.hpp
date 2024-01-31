@@ -3,15 +3,21 @@
 #include "MatchTable.hpp"
 #include "Scene.hpp"
 
+#include "Timer.hpp"
+
 class SceneGameplay : public Scene {
 private:
     enum GameplayState {
-        STATE_GAMEPLAY = 0,
+        STATE_COUNTDOWN = 0,
+        STATE_GAMEPLAY,
         STATE_COMPLETE,
         STATE_PAUSED
     };
 
     MatchTable m_MatchTable;
+
+    const float COUNTDOWN_TIME = 3.0f;
+    Timer m_CountdownTimer;
     float m_GameTime;
 
     GameplayState m_GameplayState;

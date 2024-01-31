@@ -24,12 +24,16 @@ private:
     std::pair<int, int> m_SelectedElements;
     int m_SelectCount;
 
+    const float DESELECT_TIME = 0.25f;
     Timer m_DeselectTimer;
     
 public:
     MatchTable() = delete;
     MatchTable(const MatchTableDifficulty difficulty);
 
+    void Update();
+
+    inline MatchTableDifficulty GetDifficulty() { return m_Difficulty; }
     inline int GetDifficultyValue() { return m_Difficulty; }
 
     inline std::vector<MatchTableObject>& GetTable() { return m_MatchTable; }
@@ -44,5 +48,6 @@ public:
 
     inline Vector2 GetTableArea() { return { ((float) sqrt(m_Difficulty) * MatchTableObject::WIDTH) + ((float) (sqrt(m_Difficulty) - 1) * 10), ((float) sqrt(m_Difficulty) * MatchTableObject::HEIGHT) + ((float) (sqrt(m_Difficulty) - 1) * 10) }; }
 
-    void MatchTableProcessInput();
+    void ProcessInput();
+    void CheckTableState();
 };
