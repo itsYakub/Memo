@@ -14,7 +14,13 @@
 
 #include "PlayerData.hpp"
 
-SceneGameplay::SceneGameplay(const MatchTableDifficulty difficulty) : m_MatchTable(difficulty), m_CountdownTimer(COUNTDOWN_TIME), m_GameTime(0.0), m_GameplayState(STATE_COUNTDOWN) { }
+#include "ResourceMenager.hpp"
+
+#include "SoundMenager.hpp"
+
+#include "Settings.hpp"
+
+SceneGameplay::SceneGameplay(const MatchTableDifficulty difficulty) : m_MatchTable(difficulty), m_CountdownTimer(COUNTDOWN_TIME), m_GameTime(0.0), m_GameplayState(STATE_COUNTDOWN), m_CountdownAfterPause(false) { }
 
 SceneGameplay::~SceneGameplay() {
     Destroy();
@@ -22,6 +28,8 @@ SceneGameplay::~SceneGameplay() {
 
 void SceneGameplay::Init() {
     Window::Get().SetRendererBackgroundColor(235, 235, 235);
+
+    Settings::Get().GetSettingB(GAMEPLAY_COUNTDOWN_AT_THE_BEGINNING) ? m_GameplayState = STATE_COUNTDOWN : m_GameplayState = STATE_GAMEPLAY;
 }
 
 void SceneGameplay::Destroy() {
@@ -55,17 +63,20 @@ void SceneGameplay::Update() {
         
         case STATE_PAUSED:
             if(IsKeyPressed(KEY_ESCAPE)) {
-                // TODO: add an option to switch post-pause countdown on and off in the settings
-                // For now, let's stay with the countdown
+                if(Settings::Get().GetSettingB(GAMEPLAY_COUNTDOWN_AFTER_PAUSE)) {
+                    m_CountdownTimer.Reset(COUNTDOWN_TIME);
+                    m_GameplayState = STATE_COUNTDOWN;
+                }
 
-                m_CountdownTimer = Timer(COUNTDOWN_TIME);
-                m_GameplayState = STATE_COUNTDOWN;
+                else if(!Settings::Get().GetSettingB(GAMEPLAY_COUNTDOWN_AFTER_PAUSE)) {
+                    m_GameplayState = STATE_GAMEPLAY;
+                }
             }
 
             break;
 
         case STATE_COMPLETE:
-            switch(m_MatchTable.GetDifficulty()) {
+            switch(m_MatchTable.GetDifficulty()) 
                 case DIFFICULTY_EASY: 
                     if(!PlayerData::Get().GetCompleteState(0)) 
                         PlayerData::Get().SetCompleteState(0, true); 
@@ -92,7 +103,6 @@ void SceneGameplay::Update() {
                         PlayerData::Get().SetCompleteTime(2, m_GameTime); 
 
                     break;
-            }
 
             break;
     }
@@ -100,7 +110,7 @@ void SceneGameplay::Update() {
 
 void SceneGameplay::Render() {
     switch(m_GameplayState) {
-        case STATE_COUNTDOWN: {
+        case STATE_COUNTDOWN: {        
             std::string countdown_text = std::to_string(m_CountdownTimer.GetTimeI() + 1);
             std::string tip_text = "Press SPACE, ESC or ENTER to skip the countdown...";
             
@@ -108,8 +118,8 @@ void SceneGameplay::Render() {
 
             GuiSetStyle(DEFAULT, TEXT_SIZE, 64);
             GuiLabel(Rectangle { 96, 72, 208, 144 }, countdown_text.c_str());
-            GuiSetStyle(DEFAULT, TEXT_SIZE, 10);
-            GuiLabel(Rectangle { 40, 216, 320, 24}, tip_text.c_str());
+            GuiSetStyle(DEFAULT, TEXT_SIZE, ResourceMenager::Get().GetCurrentFont().baseSize);
+            GuiLabel(Rectangle { 0, 216, 400, 24}, tip_text.c_str());
 
             GuiSetStyle(LABEL, TEXT_ALIGNMENT, DEFAULT);
 
@@ -117,32 +127,44 @@ void SceneGameplay::Render() {
         }
 
         case STATE_GAMEPLAY: {
+            DrawTextureEx(ResourceMenager::Get().GetTextureByName("background"), Vector2 { 0, 0 }, 0.0f, 10.0f, WHITE);
+
             for(auto& i : m_MatchTable.GetTable()) {
                 i.Render();
             }
 
             if(GuiLabelButton(Rectangle{ 376, 0, 24, 24 }, GuiIconText(ICON_PLAYER_PAUSE, nullptr))) {
                 m_GameplayState = STATE_PAUSED;
+
+                SoundMenager::Get().PlaySoundFromCache("click");
             }
 
-            GuiLabel(Rectangle { 0, 0, 120, 24 }, TextFormat("Time: %0.02fs", m_GameTime));
+            if(Settings::Get().GetSettingB(GAMEPLAY_DISPLAY_TIME)) {
+                GuiLabel(Rectangle { 8, 0, 120, 24 }, TextFormat("Time: %0.02fs", m_GameTime));
+            }
 
             break;
         }
 
-        case STATE_PAUSED: {
+        case STATE_PAUSED: {        
             GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
 
             GuiSetStyle(DEFAULT, TEXT_SIZE, 32);
             GuiLabel(Rectangle { 136, 88, 128, 64 }, "Pause");
-            GuiSetStyle(DEFAULT, TEXT_SIZE, 10);
+            GuiSetStyle(DEFAULT, TEXT_SIZE, ResourceMenager::Get().GetCurrentFont().baseSize);
+
+            GuiSetStyle(LABEL, TEXT_ALIGNMENT, DEFAULT);
             
             if(GuiButton(Rectangle { 144, 168, 112, 24 }, GuiIconText(ICON_RESTART, "Resume"))) {
                 m_GameplayState = STATE_GAMEPLAY;
+
+                SoundMenager::Get().PlaySoundFromCache("click");
             }
 
             if(GuiButton(Rectangle { 144, 200, 112, 24 }, GuiIconText(ICON_EXIT, "Quit"))) {
                 SceneMenager::Get().LoadScene(std::make_unique<SceneMainMenu>());
+
+                SoundMenager::Get().PlaySoundFromCache("click");
             }
 
             break;
@@ -152,19 +174,23 @@ void SceneGameplay::Render() {
             GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
 
             GuiSetStyle(DEFAULT, TEXT_SIZE, 32);
-            GuiLabel(Rectangle { 96, 64, 208, 80 }, "Level Complete!");
-            GuiSetStyle(DEFAULT, TEXT_SIZE, 10);
+            GuiLabel(Rectangle { 48, 80, 304, 64 }, "Level Complete!");
+            GuiSetStyle(DEFAULT, TEXT_SIZE, ResourceMenager::Get().GetCurrentFont().baseSize);
 
             GuiLabel(Rectangle { 144, 152, 112, 24 }, GuiIconText(ICON_CLOCK, TextFormat("Time: %0.02fs", m_GameTime)));
 
             GuiSetStyle(LABEL, TEXT_ALIGNMENT, DEFAULT);
             
-            if(GuiButton(Rectangle { 144, 192, 112, 24 }, GuiIconText(ICON_RESTART, "Play again"))) {
+            if(GuiButton(Rectangle { 120, 192, 160, 24 }, GuiIconText(ICON_RESTART, "Play again"))) {
                 SceneMenager::Get().LoadScene(std::make_unique<SceneGameplay>((MatchTableDifficulty) m_MatchTable.GetDifficultyValue()));
+
+                SoundMenager::Get().PlaySoundFromCache("click");
             }
 
             if(GuiButton(Rectangle { 144, 224, 112, 24 }, GuiIconText(ICON_EXIT, "Quit"))) {
                 SceneMenager::Get().LoadScene(std::make_unique<SceneMainMenu>());
+
+                SoundMenager::Get().PlaySoundFromCache("click");
             }
 
             break;

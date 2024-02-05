@@ -9,7 +9,11 @@
 #include "Timer.hpp"
 #include "Debug.hpp"
 
-MatchTable::MatchTable(const MatchTableDifficulty difficulty) : m_MatchTable(), m_Difficulty(difficulty), m_SelectedElements(std::pair<int, int>(0, 0)), m_SelectCount(0), m_DeselectTimer(DESELECT_TIME) {
+#include "SoundMenager.hpp"
+
+#include "Settings.hpp"
+
+MatchTable::MatchTable(const MatchTableDifficulty difficulty) : m_MatchTable(), m_Difficulty(difficulty), m_SelectedElements(std::pair<int, int>(0, 0)), m_SelectCount(0), m_DeselectTimer(0.0f) {
     const int diff_value = difficulty;
     const int diff_value_sqrt = sqrt(difficulty);
 
@@ -27,12 +31,14 @@ MatchTable::MatchTable(const MatchTableDifficulty difficulty) : m_MatchTable(), 
             
             Vector2 position;
             // Formula: position at (0,0) + the center of the screen - the half of the size of the whole table
-            position.x = (float) (j * MatchTableObject::WIDTH + MatchTableObject::SPACING * j) + (Window::Get().GetRendererCenter().x) - (0.5f * (diff_value_sqrt * MatchTableObject::WIDTH + (diff_value_sqrt - 1) * MatchTableObject::SPACING));
-            position.y = (float) (i * MatchTableObject::HEIGHT + MatchTableObject::SPACING * i) + (Window::Get().GetRendererCenter().y) - (0.5f * (diff_value_sqrt * MatchTableObject::HEIGHT + (diff_value_sqrt - 1) * MatchTableObject::SPACING));
+            position.x = round((j * MatchTableObject::WIDTH + MatchTableObject::SPACING * j) + (Window::Get().GetRendererCenter().x) - (0.5f * (diff_value_sqrt * MatchTableObject::WIDTH + (diff_value_sqrt - 1) * MatchTableObject::SPACING)));
+            position.y = round((i * MatchTableObject::HEIGHT + MatchTableObject::SPACING * i) + (Window::Get().GetRendererCenter().y) - (0.5f * (diff_value_sqrt * MatchTableObject::HEIGHT + (diff_value_sqrt - 1) * MatchTableObject::SPACING)));
 
             m_MatchTable.push_back(MatchTableObject(position, random_value, index));
         }
     }
+    
+    m_DeselectTimer.Reset(Settings::Get().GetSettingF(GAMEPLAY_DESELECT_TIME));
 
     Debug::Log("Match table created successfully");
 }
@@ -53,7 +59,7 @@ bool MatchTable::GetCompleteState() {
 }
 
 void MatchTable::ProcessInput() {
-    if((IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_ENTER)) && m_SelectCount < 2) {
+    if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && m_SelectCount < 2) {
         for(auto& i : m_MatchTable) {
             if(CheckCollisionPointRec(GetMousePosition(), (Rectangle) { (float) i.GetPosition().x, (float) i.GetPosition().y, (float) MatchTableObject::WIDTH, (float) MatchTableObject::HEIGHT})) {
                 if(i.GetPickState()) {
@@ -98,6 +104,6 @@ void MatchTable::CheckTableState() {
 
         m_SelectCount = 0;
 
-        m_DeselectTimer = Timer(DESELECT_TIME);
+        m_DeselectTimer.Reset(Settings::Get().GetSettingF(GAMEPLAY_DESELECT_TIME));
     }
 }

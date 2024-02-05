@@ -24,7 +24,6 @@ private:
     std::pair<int, int> m_SelectedElements;
     int m_SelectCount;
 
-    const float DESELECT_TIME = 0.25f;
     Timer m_DeselectTimer;
     
 public:

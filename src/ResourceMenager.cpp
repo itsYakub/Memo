@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 #include "raylib.h"
+#include "raygui.h"
 
 #include "Debug.hpp"
 
@@ -18,14 +19,24 @@ ResourceMenager::~ResourceMenager() {
     }
 }
 
-void ResourceMenager::InsertTexture(Texture2D texture, const std::string name) {
-    if(IsTextureReady(texture)) {
-        m_TextureList.insert(std::make_pair(name, texture));
-    }
+void ResourceMenager::InsertTexture(const std::string path, const std::string name) {
+    m_TextureList.insert(std::make_pair(name, LoadTexture(path.c_str())));
+}
+
+void ResourceMenager::InsertFont(const std::string path) {
+    m_CurrentFont = LoadFontEx(path.c_str(), 16, 0, 256);
+    GuiSetFont(m_CurrentFont);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, m_CurrentFont.baseSize);
 }
 
 Texture2D& ResourceMenager::GetTextureByName(const std::string name) {
-    if(auto texture = m_TextureList.find(name); texture != m_TextureList.end()) {
+    auto texture = m_TextureList.find(name);
+
+    if(texture != m_TextureList.end()) {
         return texture->second;
     }
+}
+
+Font& ResourceMenager::GetCurrentFont() {
+    return m_CurrentFont;
 }

@@ -24,9 +24,11 @@ Window::Window() {
     GuiEnableTooltip();
     GuiLoadIcons("res/rguiicons/icon_set.rgi", true);
 
+    MaximizeWindow();
+
     Debug::Log("Window instance created successfully");
 
-    this->m_RendererTarget = LoadRenderTexture(400, 300); 
+    this->m_RendererTarget = LoadRenderTexture(400, 296); 
 
     this->m_WindowWidth = GetScreenWidth();
     this->m_WindowHeight = GetScreenHeight();

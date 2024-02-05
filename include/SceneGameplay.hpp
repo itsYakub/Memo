@@ -22,6 +22,8 @@ private:
 
     GameplayState m_GameplayState;
 
+    bool m_CountdownAfterPause;
+
 public:
     SceneGameplay(const MatchTableDifficulty difficulty);
     ~SceneGameplay() override;
