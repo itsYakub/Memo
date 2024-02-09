@@ -82,7 +82,13 @@ void SceneMainMenu::Render() {
         case STATE_LEVEL_CHOOSING:
             DrawTextureEx(resources.GetTextureByName("background"), Vector2 { 0, 0 }, 0.0f, 10.0f, WHITE);
 
+            GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
+
+            GuiSetStyle(DEFAULT, TEXT_SIZE, 32);
+            GuiLabel(Rectangle { 40, 24, 320, 96 }, "Choose a level");
             GuiSetStyle(DEFAULT, TEXT_SIZE, resources.GetCurrentFont().baseSize);
+
+            GuiSetStyle(LABEL, TEXT_ALIGNMENT, DEFAULT);
 
             if(GuiButton(Rectangle { 120, 136, 160, 24 }, PlayerData::Get().GetCompleteState(0) ? TextFormat("Easy (%0.02fs)", PlayerData::Get().GetCompleteTime(0)) : "Easy")) {
                 scene_menager.LoadScene(std::make_unique<SceneGameplay>(DIFFICULTY_EASY));

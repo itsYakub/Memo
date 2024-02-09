@@ -46,6 +46,11 @@ void SceneSettings::Render() {
         case SECTION_GAMEPLAY:
             section_name = std::string(TextFormat("%i. Gameplay", m_SettingSection));
 
+            if(GuiButton(Rectangle { 136, 264, 128, 24 }, GuiIconText(ICON_RESTART, "Back"))) {
+                SceneMenager::Get().LoadScene(std::make_unique<SceneMainMenu>());
+                sounds.PlaySoundFromCache("click");
+            }
+
             // Setting: GAMEPLAY_DISPLAY_TIME
             GuiLabel(Rectangle { 24, 120, 288, 24 }, "Display the gameplay time:");
             GuiCheckBox(Rectangle { 368, 120, 24, 24 }, nullptr, &settings.GetSettingB(GAMEPLAY_DISPLAY_TIME));
@@ -61,11 +66,6 @@ void SceneSettings::Render() {
             // Setting: GAMEPLAY_DESELECT_TIME
             GuiLabel(Rectangle { 24, 216, 240, 24 }, "Deselect time:");
             GuiSlider(Rectangle { 272, 216, 120, 24 }, nullptr, nullptr, &settings.GetSettingF(GAMEPLAY_DESELECT_TIME), 0.1f, 0.8f);
-            
-            if(GuiButton(Rectangle { 136, 264, 128, 24 }, GuiIconText(ICON_RESTART, "Back"))) {
-                SceneMenager::Get().LoadScene(std::make_unique<SceneMainMenu>());
-                sounds.PlaySoundFromCache("click");
-            }
 
 
             break;

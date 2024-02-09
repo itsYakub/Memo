@@ -18,6 +18,7 @@
 // - implement the basics of the IO system: saving progress, saving settings
 // - build the system that makes the final game directory (official build and all the resources)
 // - bug-fix, code clean-up / optimizations
+// - RELEASE
 
 class Game {
 private:

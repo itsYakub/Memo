@@ -119,9 +119,10 @@ void SceneGameplay::Render() {
             GuiSetStyle(DEFAULT, TEXT_SIZE, 64);
             GuiLabel(Rectangle { 96, 72, 208, 144 }, countdown_text.c_str());
             GuiSetStyle(DEFAULT, TEXT_SIZE, ResourceMenager::Get().GetCurrentFont().baseSize);
-            GuiLabel(Rectangle { 0, 216, 400, 24}, tip_text.c_str());
-
             GuiSetStyle(LABEL, TEXT_ALIGNMENT, DEFAULT);
+            GuiSetStyle(DEFAULT, TEXT_WRAP_MODE, TEXT_WRAP_WORD);
+            GuiLabel(Rectangle { 16, 216, 368, 48}, tip_text.c_str());
+            GuiSetStyle(DEFAULT, TEXT_WRAP_MODE, TEXT_WRAP_NONE);
 
             break;
         }
