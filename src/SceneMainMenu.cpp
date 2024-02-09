@@ -69,7 +69,7 @@ void SceneMainMenu::Render() {
             // Other GUI buttons
             // Github button (Icon ID 220 - Github)
             if(GuiLabelButton(Rectangle { 8, 264, 24, 24 }, GuiIconText(220, nullptr))) {
-                OpenURL("https://github.com/itsYakub");
+                OpenURL("https://github.com/itsYakub/Memo");
             }
 
             // Ko-fi button (Icon ID 221 - Ko-Fi)
