@@ -1,4 +1,5 @@
 # Memo
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/P5P8U0T3I)
 
 <i>Point and click, find the pairs in the shortest amount of time!</i>
 

@@ -27,7 +27,7 @@ SceneGameplay::~SceneGameplay() {
 }
 
 void SceneGameplay::Init() {
-    Window::Get().SetRendererBackgroundColor(235, 235, 235);
+    Window::Get().SetRendererBackgroundColor(245, 245, 245);
 
     Settings::Get().GetSettingB(GAMEPLAY_COUNTDOWN_AT_THE_BEGINNING) ? m_GameplayState = STATE_COUNTDOWN : m_GameplayState = STATE_GAMEPLAY;
 }

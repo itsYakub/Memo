@@ -19,7 +19,7 @@
 SceneSettings::SceneSettings() { }
 
 void SceneSettings::Init() {
-    Window::Get().SetRendererBackgroundColor(235, 235, 235);
+    Window::Get().SetRendererBackgroundColor(245, 245, 245);
 
     m_SettingSection = SECTION_GAMEPLAY;
     m_CurrentSettingSection = m_SettingSection;

@@ -16,7 +16,7 @@ Window::Window() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     SetConfigFlags(FLAG_VSYNC_HINT);
 
-    InitWindow(1280, 960, "Raylib 5.0.0 - Memo - Version 1.0.0");
+    InitWindow(1280, 960, TextFormat("Raylib %s - Memo - Version 1.0.0", RAYLIB_VERSION));
 
     SetExitKey(0);
 

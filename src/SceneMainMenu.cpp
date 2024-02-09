@@ -19,7 +19,7 @@
 SceneMainMenu::SceneMainMenu() { }
 
 void SceneMainMenu::Init() {
-    Window::Get().SetRendererBackgroundColor(235, 235, 235);
+    Window::Get().SetRendererBackgroundColor(245, 245, 245);
     m_MainMenuState = STATE_DEFAULT;
 }
 

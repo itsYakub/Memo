@@ -13,7 +13,7 @@
 SceneSplashScreen::SceneSplashScreen() : m_SplashScreenTimer(3.0f) { }
 
 void SceneSplashScreen::Init() {
-    Window::Get().SetRendererBackgroundColor(200, 200, 200);
+    Window::Get().SetRendererBackgroundColor(245, 245, 245);
 }
 
 void SceneSplashScreen::Destroy() {

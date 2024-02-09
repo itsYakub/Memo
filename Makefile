@@ -2,8 +2,6 @@
 # Made by: Yakub (https://github.com/itsYakub)
 # Version: 1.0.0
 # ===============================================================================
-#
-# ===============================================================================
 # Build mode (BUILD_MODE):
 # > debug (default)
 # > release
@@ -32,6 +30,7 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 # ===============================================================================
+
 BUILD_PLATFORM ?= windows
 BUILD_MODE ?= debug
 
@@ -48,8 +47,9 @@ CXX = g++
 # Default compilation flags
 CXXFLAGS = -std=c++20
 
+# Add the compilation flags based on the build mode
 ifeq ($(BUILD_MODE), debug)
-	CXXFLAGS += -g -Wall -Wextra
+	CXXFLAGS += -g -Wall -Wextra 
 endif
 ifeq ($(BUILD_MODE), release) 
 	CXXFLAGS += -s -O2
@@ -86,11 +86,13 @@ TARGET = $(BUILD_DIR)/Game.out
 all: dirs build
 
 dirs:
+# if the '/bin' directory (for debug) / '/game' directory (for release) doesn't exist
+# create a correct build directory
 ifeq ($(BUILD_MODE), debug)
-	if [ ! -d "./bin" ]; then mkdir bin; fi
+	@if [ ! -d "./bin" ]; then mkdir bin; fi
 endif
 ifeq ($(BUILD_MODE), release) 
-	if [ ! -d "./game" ]; then mkdir game; fi
+	@if [ ! -d "./game" ]; then mkdir game; fi
 endif
 
 build: $(TARGET)
@@ -98,9 +100,12 @@ build: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) $(LXXFLAGS) 
 
+# RELEASE MODE ONLY:
+# Copying the './res' directory with all the resources
+# Removing all the '.obj' files
 ifeq ($(BUILD_MODE), release) 
-	cp -r ./res ./$(BUILD_DIR)
-	rm -rf $(OBJS)
+	@cp -r ./res ./$(BUILD_DIR)
+	@rm -rf $(OBJS)
 endif
 
 $(OBJS): $(BUILD_DIR)/%.obj: src/%.cpp
