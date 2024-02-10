@@ -32,6 +32,13 @@
 *.exe
 *.out
 *.app
+bin/*.exe
+bin/*.out
+bin/*.app
+game/*.exe
+game/*.out
+game/*.app
+
 
 # Directories
 bin/
