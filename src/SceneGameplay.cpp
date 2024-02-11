@@ -41,7 +41,7 @@ void SceneGameplay::Update() {
         case STATE_COUNTDOWN:
             m_CountdownTimer.Process();
 
-            if(m_CountdownTimer.Finished() || (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_SPACE))) {
+            if(m_CountdownTimer.Finished() || GetKeyPressed()) {
                 m_GameplayState = STATE_GAMEPLAY;
             }
 
@@ -112,17 +112,18 @@ void SceneGameplay::Render() {
     switch(m_GameplayState) {
         case STATE_COUNTDOWN: {        
             std::string countdown_text = std::to_string(m_CountdownTimer.GetTimeI() + 1);
-            std::string tip_text = "Press SPACE, ESC or ENTER to skip the countdown...";
+            std::string tip_text = "Press ANY KEY to skip the countdown...";
             
             GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
 
             GuiSetStyle(DEFAULT, TEXT_SIZE, 64);
             GuiLabel(Rectangle { 96, 72, 208, 144 }, countdown_text.c_str());
             GuiSetStyle(DEFAULT, TEXT_SIZE, ResourceMenager::Get().GetCurrentFont().baseSize);
-            GuiSetStyle(LABEL, TEXT_ALIGNMENT, DEFAULT);
             GuiSetStyle(DEFAULT, TEXT_WRAP_MODE, TEXT_WRAP_WORD);
+            // TODO: Fix the alignment problem of this GuiLabel();
             GuiLabel(Rectangle { 16, 216, 368, 48}, tip_text.c_str());
             GuiSetStyle(DEFAULT, TEXT_WRAP_MODE, TEXT_WRAP_NONE);
+            GuiSetStyle(LABEL, TEXT_ALIGNMENT, DEFAULT);
 
             break;
         }

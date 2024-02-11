@@ -1,20 +1,25 @@
 #pragma once
 
 #include <array>
+#include <utility>
 
 class PlayerData {
 private:
-    std::array<bool, 3> m_LevelComplete;
-    std::array<float, 3> m_LevelTopTime;
+    // - First element of the `m_LevelCompleteState` stands for the complete state of the level
+    // - Second element of the `m_LevelCompleteState` stands for the best time the player has gotten
+    std::array<std::pair<bool, float>, 3> m_LevelCompleteState; 
 
-    PlayerData() { }
+    PlayerData();
 
 public:
     static PlayerData& Get() { static PlayerData instance; return instance; }
 
-    inline bool GetCompleteState(int index) { return m_LevelComplete.at(index); }
-    inline void SetCompleteState(int index, bool state) { m_LevelComplete.at(index) = state; }
+    bool GetCompleteState(int index);
+    void SetCompleteState(int index, bool state);
 
-    inline float GetCompleteTime(int index) { return m_LevelTopTime.at(index); }
-    inline void SetCompleteTime(int index, float time) { m_LevelTopTime.at(index) = time; }
+    float GetCompleteTime(int index);
+    void SetCompleteTime(int index, float time);
+
+    void SerializeData(); // In other words: save the player's data to the save file
+    void DeserializeData(); // In other words: load the player's data from the save file
 };

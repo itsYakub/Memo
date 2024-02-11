@@ -2,11 +2,11 @@
 # Made by: Yakub (https://github.com/itsYakub)
 # Version: 1.0.0
 # ===============================================================================
-# Build mode (BUILD_MODE):
+# Build mode (MODE):
 # > debug (default)
 # > release
 # ===============================================================================
-# Build platform (BUILD_PLATFORM):
+# Build platform (PLATFORM):
 # > windows (default)
 # > linux
 # ===============================================================================
@@ -31,13 +31,13 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 # ===============================================================================
 
-BUILD_PLATFORM ?= windows
-BUILD_MODE ?= debug
+PLATFORM ?= windows
+MODE ?= debug
 
-ifeq ($(BUILD_MODE), debug)
+ifeq ($(MODE), debug)
 	BUILD_DIR = bin
 endif
-ifeq ($(BUILD_MODE), release) 
+ifeq ($(MODE), release) 
 	BUILD_DIR = game
 endif
 
@@ -48,10 +48,10 @@ CXX = g++
 CXXFLAGS = -std=c++20
 
 # Add the compilation flags based on the build mode
-ifeq ($(BUILD_MODE), debug)
+ifeq ($(MODE), debug)
 	CXXFLAGS += -g -Wall -Wextra 
 endif
-ifeq ($(BUILD_MODE), release) 
+ifeq ($(MODE), release) 
 	CXXFLAGS += -s -O2
 endif
 
@@ -69,10 +69,10 @@ LDFLAGS = -Llib
 # Project's libraries
 # Make sure to compile the raylib to the STATIC library before running
 # Doing otherwise will cause an error
-ifeq ($(BUILD_PLATFORM), windows)
+ifeq ($(PLATFORM), windows)
 	LXXFLAGS = -lraylib -lgdi32 -lwinmm -lopengl32
 endif
-ifeq ($(BUILD_PLATFORM), linux) 
+ifeq ($(PLATFORM), linux) 
 	LXXFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 endif
 
@@ -88,10 +88,10 @@ all: dirs build
 dirs:
 # if the '/bin' directory (for debug) / '/game' directory (for release) doesn't exist
 # create a correct build directory
-ifeq ($(BUILD_MODE), debug)
+ifeq ($(MODE), debug)
 	@if [ ! -d "./bin" ]; then mkdir bin; fi
 endif
-ifeq ($(BUILD_MODE), release) 
+ifeq ($(MODE), release) 
 	@if [ ! -d "./game" ]; then mkdir game; fi
 endif
 
@@ -103,7 +103,7 @@ $(TARGET): $(OBJS)
 # RELEASE MODE ONLY:
 # Copying the './res' directory with all the resources
 # Removing all the '.obj' files
-ifeq ($(BUILD_MODE), release) 
+ifeq ($(MODE), release) 
 	@cp -r ./res ./$(BUILD_DIR)
 	@rm -rf $(OBJS)
 endif

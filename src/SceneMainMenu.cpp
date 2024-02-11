@@ -101,13 +101,13 @@ void SceneMainMenu::Render() {
             } 
 
             if(GuiButton(Rectangle { 120, 200, 160, 24 }, PlayerData::Get().GetCompleteState(2) ? TextFormat("Hard (%0.02fs)", PlayerData::Get().GetCompleteTime(2)) : "Hard")) {
-                sound_menager.PlaySoundFromCache("click");
                 scene_menager.LoadScene(std::make_unique<SceneGameplay>(DIFFICULTY_HARD));
+                sound_menager.PlaySoundFromCache("click");
             } 
 
             if(GuiButton(Rectangle { 120, 232, 160, 24 }, GuiIconText(ICON_RESTART, "Back"))) {
-                sound_menager.PlaySoundFromCache("click");
                 m_MainMenuState = STATE_DEFAULT;
+                sound_menager.PlaySoundFromCache("click");
             } 
 
             break;

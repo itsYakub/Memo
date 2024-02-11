@@ -44,12 +44,7 @@ void SceneSettings::Render() {
      
     switch (m_SettingSection) {
         case SECTION_GAMEPLAY:
-            section_name = std::string(TextFormat("%i. Gameplay", m_SettingSection));
-
-            if(GuiButton(Rectangle { 136, 264, 128, 24 }, GuiIconText(ICON_RESTART, "Back"))) {
-                SceneMenager::Get().LoadScene(std::make_unique<SceneMainMenu>());
-                sounds.PlaySoundFromCache("click");
-            }
+            section_name = std::string(TextFormat("%i. Gameplay", m_SettingSection + 1));
 
             // Setting: GAMEPLAY_DISPLAY_TIME
             GuiLabel(Rectangle { 24, 120, 288, 24 }, "Display the gameplay time:");
@@ -69,6 +64,20 @@ void SceneSettings::Render() {
 
 
             break;
+
+        case SECTION_IO:
+            section_name = std::string(TextFormat("%i. File System", m_SettingSection + 1));
+
+            // Setting: IO_SAVE_ON_GAME_EXIT
+            GuiLabel(Rectangle { 24, 120, 288, 24 }, "Save the data on game exit:");
+            GuiCheckBox(Rectangle { 368, 120, 24, 24 }, nullptr, &settings.GetSettingB(IO_SAVE_ON_GAME_EXIT));
+
+            // Setting: IO_SAVE_ON_LEVEL_EXIT
+            GuiLabel(Rectangle { 24, 152, 288, 24 }, "Save the data on level exit:");
+            GuiCheckBox(Rectangle { 368, 152, 24, 24 }, nullptr, &settings.GetSettingB(IO_SAVE_ON_LEVEL_EXIT));
+
+            break;
+
     }
 
     GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
@@ -78,14 +87,31 @@ void SceneSettings::Render() {
     GuiSetStyle(DEFAULT, TEXT_SIZE, ResourceMenager::Get().GetCurrentFont().baseSize);
 
     GuiLabel(Rectangle { 120, 80, 160, 24 }, section_name.c_str());
+
+    if(--m_CurrentSettingSection < 0) GuiDisable();
+
     if(GuiButton(Rectangle { 96, 80, 24, 24 }, GuiIconText(ICON_ARROW_LEFT_FILL, nullptr))) {
         sounds.PlaySoundFromCache("click");
+        m_CurrentSettingSection--;
     }
 
+    GuiEnable();
+
+    if(++m_CurrentSettingSection >= 1) GuiDisable();
+    
     if(GuiButton(Rectangle { 280, 80, 24, 24 }, GuiIconText(ICON_ARROW_RIGHT_FILL, nullptr))) {
         sounds.PlaySoundFromCache("click");
+        m_CurrentSettingSection++;
     }
+
+    GuiEnable();
+
+    m_SettingSection = static_cast<SceneSettingSection>(m_CurrentSettingSection);
 
     GuiSetStyle(LABEL, TEXT_ALIGNMENT, DEFAULT);
 
+    if(GuiButton(Rectangle { 136, 264, 128, 24 }, GuiIconText(ICON_RESTART, "Back"))) {
+        SceneMenager::Get().LoadScene(std::make_unique<SceneMainMenu>());
+        sounds.PlaySoundFromCache("click");
+    }
 }
