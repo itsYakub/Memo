@@ -39,7 +39,9 @@ game/*.exe
 game/*.out
 game/*.app
 
-
 # Directories
 bin/
 game/
+
+# misc
+data.json

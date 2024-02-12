@@ -190,6 +190,10 @@ void SceneGameplay::Render() {
             }
 
             if(GuiButton(Rectangle { 144, 224, 112, 24 }, GuiIconText(ICON_EXIT, "Quit"))) {
+                if(Settings::Get().GetSettingB(IO_SAVE_ON_LEVEL_EXIT)) {
+                    PlayerData::Get().SerializePlayerData();
+                }
+
                 SceneMenager::Get().LoadScene(std::make_unique<SceneMainMenu>());
 
                 SoundMenager::Get().PlaySoundFromCache("click");

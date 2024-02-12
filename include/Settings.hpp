@@ -35,6 +35,7 @@ private:
     // > `IO_SAVE_ON_GAME_EXIT` - automatically save the player's data when the player exits the game (Default: `false`);
     // > `IO_SAVE_ON_LEVEL_EXIT` - automatically save the player's data when the player exits the level / restarts the level (Default: `true`);
     Settings();
+    ~Settings();
 public:
     static Settings& Get() { static Settings instance; return instance; }
 
@@ -43,4 +44,7 @@ public:
     
     void SetSettingF(SettingList setting, float value);
     void SetSettingB(SettingList setting, bool value);
+
+    void SerializeSettings();
+    void DeserializeSettings();
 };

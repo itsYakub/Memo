@@ -60,7 +60,7 @@ void SceneSettings::Render() {
             
             // Setting: GAMEPLAY_DESELECT_TIME
             GuiLabel(Rectangle { 24, 216, 240, 24 }, "Deselect time:");
-            GuiSlider(Rectangle { 272, 216, 120, 24 }, nullptr, nullptr, &settings.GetSettingF(GAMEPLAY_DESELECT_TIME), 0.1f, 0.8f);
+            GuiSlider(Rectangle { 272, 216, 120, 24 }, TextFormat("%0.02f", settings.GetSettingF(GAMEPLAY_DESELECT_TIME)), nullptr, &settings.GetSettingF(GAMEPLAY_DESELECT_TIME), 0.1f, 0.8f);
 
 
             break;
@@ -111,7 +111,10 @@ void SceneSettings::Render() {
     GuiSetStyle(LABEL, TEXT_ALIGNMENT, DEFAULT);
 
     if(GuiButton(Rectangle { 136, 264, 128, 24 }, GuiIconText(ICON_RESTART, "Back"))) {
+        settings.SerializeSettings();
+
         SceneMenager::Get().LoadScene(std::make_unique<SceneMainMenu>());
+        
         sounds.PlaySoundFromCache("click");
     }
 }

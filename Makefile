@@ -60,7 +60,7 @@ SRCS = $(wildcard src/*.cpp)
 
 # Project's include directories
 # Make sure to provide the valid paths to the raylib's and raygui's include directories
-IXXFLAGS = -Iinclude -Ilib/raylib/src -Ilib/raygui/src 
+IXXFLAGS = -Iinclude -Ilib/raylib/src -Ilib/raygui/src -Ilib/json/single_include/nlohmann
 
 # Project's library directories
 # Make sure to provide the valid path to the project's libraries
