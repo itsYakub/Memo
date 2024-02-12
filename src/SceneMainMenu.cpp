@@ -10,7 +10,7 @@
 #include "SceneMenager.hpp"
 #include "SceneSettings.hpp"
 
-#include "PlayerData.hpp"
+#include "FileSystem.hpp"
 
 #include "ResourceMenager.hpp"
 
@@ -90,17 +90,17 @@ void SceneMainMenu::Render() {
 
             GuiSetStyle(LABEL, TEXT_ALIGNMENT, DEFAULT);
 
-            if(GuiButton(Rectangle { 120, 136, 160, 24 }, PlayerData::Get().GetCompleteState(0) ? TextFormat("Easy (%0.02fs)", PlayerData::Get().GetCompleteTime(0)) : "Easy")) {
+            if(GuiButton(Rectangle { 120, 136, 160, 24 }, FileSystem::Get().GetJson()["player"]["level_finish"][0] ? TextFormat("Easy (%.2fs)", (float) FileSystem::Get().GetJson()["player"]["level_best_time"][0]) : "Easy")) {
                 scene_menager.LoadScene(std::make_unique<SceneGameplay>(DIFFICULTY_EASY));
                 sound_menager.PlaySoundFromCache("click");
             } 
 
-            if(GuiButton(Rectangle { 120, 168, 160, 24 }, PlayerData::Get().GetCompleteState(1) ? TextFormat("Normal (%0.02fs)", PlayerData::Get().GetCompleteTime(1)) : "Normal")) {
+            if(GuiButton(Rectangle { 120, 168, 160, 24 }, FileSystem::Get().GetJson()["player"]["level_finish"][1] ? TextFormat("Normal (%.2fs)", (float) FileSystem::Get().GetJson()["player"]["level_best_time"][1]) : "Normal")) {
                 scene_menager.LoadScene(std::make_unique<SceneGameplay>(DIFFICULTY_NORMAL));
                 sound_menager.PlaySoundFromCache("click");
             } 
 
-            if(GuiButton(Rectangle { 120, 200, 160, 24 }, PlayerData::Get().GetCompleteState(2) ? TextFormat("Hard (%0.02fs)", PlayerData::Get().GetCompleteTime(2)) : "Hard")) {
+            if(GuiButton(Rectangle { 120, 200, 160, 24 }, FileSystem::Get().GetJson()["player"]["level_finish"][2] ? TextFormat("Hard (%.2fs)", (float) FileSystem::Get().GetJson()["player"]["level_best_time"][2]) : "Hard")) {
                 scene_menager.LoadScene(std::make_unique<SceneGameplay>(DIFFICULTY_HARD));
                 sound_menager.PlaySoundFromCache("click");
             } 

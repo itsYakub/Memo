@@ -12,13 +12,13 @@
 #include "SceneMenager.hpp"
 #include "SceneMainMenu.hpp"
 
-#include "PlayerData.hpp"
-
 #include "ResourceMenager.hpp"
 
 #include "SoundMenager.hpp"
 
 #include "Settings.hpp"
+
+#include "FileSystem.hpp"
 
 SceneGameplay::SceneGameplay(const MatchTableDifficulty difficulty) : m_MatchTable(difficulty), m_CountdownTimer(COUNTDOWN_TIME), m_GameTime(0.0), m_GameplayState(STATE_COUNTDOWN), m_CountdownAfterPause(false) { }
 
@@ -78,29 +78,29 @@ void SceneGameplay::Update() {
         case STATE_COMPLETE:
             switch(m_MatchTable.GetDifficulty()) 
                 case DIFFICULTY_EASY: 
-                    if(!PlayerData::Get().GetCompleteState(0)) 
-                        PlayerData::Get().SetCompleteState(0, true); 
+                    if(!FileSystem::Get().GetJson()["player"]["level_finish"][0]) 
+                        FileSystem::Get().GetJson()["player"]["level_finish"][0] = true; 
 
-                    if(PlayerData::Get().GetCompleteTime(0) >= m_GameTime || PlayerData::Get().GetCompleteTime(0) == 0.0f) 
-                        PlayerData::Get().SetCompleteTime(0, m_GameTime); 
+                    if(FileSystem::Get().GetJson()["player"]["level_best_time"][0] >= m_GameTime || FileSystem::Get().GetJson()["player"]["level_best_time"][0] == 0.0f) 
+                        FileSystem::Get().GetJson()["player"]["level_best_time"][0] = m_GameTime; 
 
                     break;
 
                 case DIFFICULTY_NORMAL: 
-                    if(!PlayerData::Get().GetCompleteState(1)) 
-                        PlayerData::Get().SetCompleteState(1, true); 
+                    if(!FileSystem::Get().GetJson()["player"]["level_finish"][1]) 
+                        FileSystem::Get().GetJson()["player"]["level_finish"][1] = true; 
 
-                    if(PlayerData::Get().GetCompleteTime(1) >= m_GameTime || PlayerData::Get().GetCompleteTime(1) == 0.0f) 
-                        PlayerData::Get().SetCompleteTime(1, m_GameTime); 
+                    if(FileSystem::Get().GetJson()["player"]["level_best_time"][1] >= m_GameTime || FileSystem::Get().GetJson()["player"]["level_best_time"][1] == 0.0f) 
+                        FileSystem::Get().GetJson()["player"]["level_best_time"][1] = m_GameTime; 
 
                     break;
 
                 case DIFFICULTY_HARD: 
-                    if(!PlayerData::Get().GetCompleteState(2)) 
-                        PlayerData::Get().SetCompleteState(2, true); 
+                    if(!FileSystem::Get().GetJson()["player"]["level_finish"][2]) 
+                        FileSystem::Get().GetJson()["player"]["level_finish"][2] = true; 
 
-                    if(PlayerData::Get().GetCompleteTime(2) >= m_GameTime || PlayerData::Get().GetCompleteTime(2) == 0.0f) 
-                        PlayerData::Get().SetCompleteTime(2, m_GameTime); 
+                    if(FileSystem::Get().GetJson()["player"]["level_best_time"][2] >= m_GameTime || FileSystem::Get().GetJson()["player"]["level_best_time"][2] == 0.0f) 
+                        FileSystem::Get().GetJson()["player"]["level_best_time"][2] = m_GameTime; 
 
                     break;
 
@@ -191,7 +191,7 @@ void SceneGameplay::Render() {
 
             if(GuiButton(Rectangle { 144, 224, 112, 24 }, GuiIconText(ICON_EXIT, "Quit"))) {
                 if(Settings::Get().GetSettingB(IO_SAVE_ON_LEVEL_EXIT)) {
-                    PlayerData::Get().SerializePlayerData();
+                    FileSystem::Get().SerializeJson();
                 }
 
                 SceneMenager::Get().LoadScene(std::make_unique<SceneMainMenu>());

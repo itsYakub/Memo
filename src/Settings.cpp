@@ -54,42 +54,27 @@ void Settings::SetSettingF(SettingList setting, float value) {
 }
 
 void Settings::SerializeSettings() {
-    if(!FileSystem::Get().DataFileExists()) {
-        return;
-    }
+    FileSystem::Get().GetJson()["settings"]["gameplay_display_time"] = m_GameplayDisplayTime;
+    FileSystem::Get().GetJson()["settings"]["gameplay_countdown_after_pause"] = m_GameplayCountdownAfterPause;
+    FileSystem::Get().GetJson()["settings"]["gameplay_countdown_at_the_beginning"] = m_GameplayCountdownAtTheBeginning;
+    FileSystem::Get().GetJson()["settings"]["io_save_on_game_exit"] = m_IOSaveOnGameExit;
+    FileSystem::Get().GetJson()["settings"]["io_save_on_level_exit"] = m_IOSaveOnLevelExit;
+    FileSystem::Get().GetJson()["settings"]["gameplay_deselect_time"] = m_GameplayDeselectTime;
 
-    std::ifstream json_input("data.json");
-    nlohmann::json json = nlohmann::json::parse(json_input);
-    json_input.close();
-
-    json["settings"]["gameplay_display_time"] = m_GameplayDisplayTime;
-    json["settings"]["gameplay_countdown_after_pause"] = m_GameplayCountdownAfterPause;
-    json["settings"]["gameplay_countdown_at_the_beginning"] = m_GameplayCountdownAtTheBeginning;
-    json["settings"]["io_save_on_game_exit"] = m_IOSaveOnGameExit;
-    json["settings"]["io_save_on_level_exit"] = m_IOSaveOnLevelExit;
-    json["settings"]["gameplay_deselect_time"] = m_GameplayDeselectTime;
-
-    std::ofstream json_output("data.json");
-    json_output << json << std::endl;
-    json_output.close();
-
+    FileSystem::Get().SerializeJson();
 
     Debug::Log("Settings serialized successfully!");
 }
 
 void Settings::DeserializeSettings() {
-    std::ifstream json_input = std::ifstream("data.json");
-    nlohmann::json json = nlohmann::json::parse(json_input);
-
-    m_GameplayDisplayTime = json["settings"]["gameplay_display_time"];
-    m_GameplayCountdownAfterPause = json["settings"]["gameplay_countdown_after_pause"];
-    m_GameplayCountdownAtTheBeginning = json["settings"]["gameplay_countdown_at_the_beginning"];
-    m_IOSaveOnGameExit = json["settings"]["io_save_on_game_exit"];
-    m_IOSaveOnLevelExit = json["settings"]["io_save_on_level_exit"];
-    m_GameplayDeselectTime = json["settings"]["gameplay_deselect_time"];
-
-    json_input.close();
+    FileSystem::Get().DeserializeJson();
+    
+    m_GameplayDisplayTime = FileSystem::Get().GetJson()["settings"]["gameplay_display_time"];
+    m_GameplayCountdownAfterPause = FileSystem::Get().GetJson()["settings"]["gameplay_countdown_after_pause"];
+    m_GameplayCountdownAtTheBeginning = FileSystem::Get().GetJson()["settings"]["gameplay_countdown_at_the_beginning"];
+    m_IOSaveOnGameExit = FileSystem::Get().GetJson()["settings"]["io_save_on_game_exit"];
+    m_IOSaveOnLevelExit = FileSystem::Get().GetJson()["settings"]["io_save_on_level_exit"];
+    m_GameplayDeselectTime = FileSystem::Get().GetJson()["settings"]["gameplay_deselect_time"];
 
     Debug::Log("Settings deserialized successfully!");
 }
-

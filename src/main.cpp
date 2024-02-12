@@ -41,17 +41,9 @@
 
 #include "FileSystem.hpp"
 
-#include "PlayerData.hpp"
-
 // TODO:
-// - implement the basics of the IO system: saving progress, saving settings
 // - bug-fix, code clean-up / optimizations
 // - RELEASE
-
-// I have a stupid idea in which I would completely ditch the "PlayerData" class and just use "FileSystem"
-// It would require me to build a getter and setter for the json object in the FileSystem class
-// and then to access them from the respected functions.
-// Probably at the game's launch I'd automatically deserialize the data file to the json object and then serialize it when needed. 
 
 class Game {
 private:
@@ -65,7 +57,7 @@ public:
     Game() {
         Debug::Log("Game instance created successfully");
 
-        if(!file_system.DataFileExists()) file_system.CreateNewDataFile();
+        file_system.DeserializeJson();
 
         sound_menager.LoadSoundToCache("res/sfx/kenney_ui-audio/Audio/click1.ogg", "click");
 
@@ -81,6 +73,10 @@ public:
         while(!window.ShouldClose()) {
             Update();
             Render();
+        }
+
+        if(Settings::Get().GetSettingB(IO_SAVE_ON_GAME_EXIT)) {
+            file_system.SerializeJson();
         }
 
         Debug::Log("Closing game...");
