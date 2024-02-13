@@ -71,15 +71,17 @@ LDFLAGS = -Llib
 # Doing otherwise will cause an error
 ifeq ($(PLATFORM), windows)
 	LXXFLAGS = -lraylib -lgdi32 -lwinmm -lopengl32
+	BUILD_EXT = exe
 endif
 ifeq ($(PLATFORM), linux) 
 	LXXFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+	BUILD_EXT = out
 endif
 
 # Project's binary files (.obj)
 OBJS = $(patsubst src/%.cpp, $(BUILD_DIR)/%.obj, $(SRCS))
 
-TARGET = $(BUILD_DIR)/Game.out
+TARGET = $(BUILD_DIR)/Game.$(BUILD_EXT)
 
 .PHONY: dirs build
 
