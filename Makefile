@@ -52,7 +52,7 @@ ifeq ($(MODE), debug)
 	@CXXFLAGS += -g -Wall -Wextra
 endif
 ifeq ($(MODE), release) 
-	@CXXFLAGS += -s -O2
+	@CXXFLAGS += -s -O2 -static-libgcc -static-libstdc++
 endif
 
 # Project's source files
