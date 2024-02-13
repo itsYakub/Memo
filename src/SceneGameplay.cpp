@@ -1,24 +1,19 @@
 #include "SceneGameplay.hpp"
 
-#include <memory>
-
 #include "raylib.h"
 #include "raygui.h"
 
-#include "MatchTable.hpp"
 #include "Window.hpp"
-#include "Debug.hpp"
+#include "MatchTable.hpp"
 
 #include "SceneMenager.hpp"
 #include "SceneMainMenu.hpp"
 
-#include "ResourceMenager.hpp"
-
-#include "SoundMenager.hpp"
-
 #include "Settings.hpp"
-
+#include "ResourceMenager.hpp"
 #include "FileSystem.hpp"
+
+#include "Debug.hpp"
 
 SceneGameplay::SceneGameplay(const MatchTableDifficulty difficulty) : m_MatchTable(difficulty), m_CountdownTimer(COUNTDOWN_TIME), m_GameTime(0.0), m_GameplayState(STATE_COUNTDOWN), m_CountdownAfterPause(false) { }
 
@@ -27,7 +22,7 @@ SceneGameplay::~SceneGameplay() {
 }
 
 void SceneGameplay::Init() {
-    Window::Get().SetRendererBackgroundColor(245, 245, 245);
+    Window::Get().SetVirtualWindowBackgroundColor(245, 245, 245);
 
     Settings::Get().GetSettingB(GAMEPLAY_COUNTDOWN_AT_THE_BEGINNING) ? m_GameplayState = STATE_COUNTDOWN : m_GameplayState = STATE_GAMEPLAY;
 }
@@ -109,6 +104,8 @@ void SceneGameplay::Update() {
 }
 
 void SceneGameplay::Render() {
+    auto& resources = ResourceMenager::Get();
+
     switch(m_GameplayState) {
         case STATE_COUNTDOWN: {        
             std::string countdown_text = std::to_string(m_CountdownTimer.GetTimeI() + 1);
@@ -138,7 +135,7 @@ void SceneGameplay::Render() {
             if(GuiLabelButton(Rectangle{ 376, 0, 24, 24 }, GuiIconText(ICON_PLAYER_PAUSE, nullptr))) {
                 m_GameplayState = STATE_PAUSED;
 
-                SoundMenager::Get().PlaySoundFromCache("click");
+                resources.PlaySoundByName("click");
             }
 
             if(Settings::Get().GetSettingB(GAMEPLAY_DISPLAY_TIME)) {
@@ -160,13 +157,13 @@ void SceneGameplay::Render() {
             if(GuiButton(Rectangle { 144, 168, 112, 24 }, GuiIconText(ICON_RESTART, "Resume"))) {
                 m_GameplayState = STATE_GAMEPLAY;
 
-                SoundMenager::Get().PlaySoundFromCache("click");
+                resources.PlaySoundByName("click");
             }
 
             if(GuiButton(Rectangle { 144, 200, 112, 24 }, GuiIconText(ICON_EXIT, "Quit"))) {
-                SceneMenager::Get().LoadScene(std::make_unique<SceneMainMenu>());
+                SceneMenager::Get().LoadScene(new SceneMainMenu());
 
-                SoundMenager::Get().PlaySoundFromCache("click");
+                resources.PlaySoundByName("click");
             }
 
             break;
@@ -184,9 +181,9 @@ void SceneGameplay::Render() {
             GuiSetStyle(LABEL, TEXT_ALIGNMENT, DEFAULT);
             
             if(GuiButton(Rectangle { 120, 192, 160, 24 }, GuiIconText(ICON_RESTART, "Play again"))) {
-                SceneMenager::Get().LoadScene(std::make_unique<SceneGameplay>((MatchTableDifficulty) m_MatchTable.GetDifficultyValue()));
+                SceneMenager::Get().LoadScene(new SceneGameplay((MatchTableDifficulty) m_MatchTable.GetDifficultyValue()));
 
-                SoundMenager::Get().PlaySoundFromCache("click");
+                resources.PlaySoundByName("click");
             }
 
             if(GuiButton(Rectangle { 144, 224, 112, 24 }, GuiIconText(ICON_EXIT, "Quit"))) {
@@ -194,9 +191,9 @@ void SceneGameplay::Render() {
                     FileSystem::Get().SerializeJson();
                 }
 
-                SceneMenager::Get().LoadScene(std::make_unique<SceneMainMenu>());
+                SceneMenager::Get().LoadScene(new SceneMainMenu());
 
-                SoundMenager::Get().PlaySoundFromCache("click");
+                resources.PlaySoundByName("click");
             }
 
             break;

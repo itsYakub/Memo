@@ -20,24 +20,23 @@ private:
 
     Window();
     ~Window();
-public:
 
+public:
     static Window& Get() { static Window instance; return instance; }
 
-    inline Vector2 GetVirtualMousePosition() { return m_VirtualMousePosition; }
+    Vector2 GetVirtualMousePosition();
 
-    inline Vector2 GetRendererSize() { return (Vector2){ (float) m_VirtualScreenWidth, (float) m_VirtualScreenHeight }; }
-    inline Vector2 GetRendererCenter() { return (Vector2) { GetRendererSize().x / 2, GetRendererSize().y / 2 }; }
+    Vector2 GetVirtualSize();
+    Vector2 GetVirtualCenter();
     
-    inline bool ShouldClose() { return WindowShouldClose() || close_callback; }
-    inline void CloseCallback() { close_callback = true; }
+    bool ShouldClose();
+    void CloseCallback();
 
+    void SetVirtualWindowBackgroundColor(unsigned char r, unsigned char g, unsigned char b);
+    
+    void InitRenderBuffer();
+    void CloseRenderBuffer();
+    
     void Update();
-
-    inline void SetRendererBackgroundColor(unsigned char r, unsigned char g, unsigned char b) { this->m_RendererColor = Color { r, g ,b, 255 }; }
-    
-    inline void RendererBegin() { BeginTextureMode(m_RendererTarget); ClearBackground(m_RendererColor); }
-    inline void RendererEnd() { EndTextureMode(); }
-    
     void Draw();
 };

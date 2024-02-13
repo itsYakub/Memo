@@ -5,8 +5,9 @@
 class SceneSettings : public Scene {    
 private:
     enum SceneSettingSection {
-        SECTION_GAMEPLAY,
+        SECTION_GAMEPLAY = 0,
         SECTION_IO,
+        LENGTH
     };
 
     SceneSettingSection m_SettingSection;

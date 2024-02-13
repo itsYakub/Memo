@@ -1,7 +1,7 @@
 #include "Debug.hpp"
 
-#include <string>
 #include <iostream>
+#include <string>
 
 void Debug::Log(const std::string text) {
     std::cout << "[LOG] " << text << std::endl;

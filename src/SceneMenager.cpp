@@ -12,12 +12,12 @@ SceneMenager::~SceneMenager() {
     UnloadScene();
 }
 
-void SceneMenager::LoadScene(std::unique_ptr<Scene> scene) {
+void SceneMenager::LoadScene(Scene* scene) {
     if(m_CurrentScene) { 
         UnloadScene();
     }
 
-    m_CurrentScene = std::move(scene);
+    m_CurrentScene = std::move(std::unique_ptr<Scene>(scene));
     m_CurrentScene->Init();
 }
 

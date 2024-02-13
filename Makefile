@@ -49,10 +49,10 @@ CXXFLAGS = -std=c++20
 
 # Add the compilation flags based on the build mode
 ifeq ($(MODE), debug)
-	CXXFLAGS += -g -Wall -Wextra 
+	@CXXFLAGS += -g -Wall -Wextra
 endif
 ifeq ($(MODE), release) 
-	CXXFLAGS += -s -O2
+	@CXXFLAGS += -s -O2
 endif
 
 # Project's source files
@@ -98,7 +98,8 @@ endif
 build: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) $(LXXFLAGS) 
+	@echo [MAKE] Linking to $@
+	@$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) $(LXXFLAGS) 
 
 # RELEASE MODE ONLY:
 # Copying the './res' directory with all the resources
@@ -108,8 +109,12 @@ ifeq ($(MODE), release)
 	@rm -rf $(OBJS)
 endif
 
+	@echo [MAKE] Compilation finished!
+
 $(OBJS): $(BUILD_DIR)/%.obj: src/%.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(IXXFLAGS)
+	@echo [MAKE] Compiling $< to $@
+	@$(CXX) $(CXXFLAGS) -c $< -o $@ $(IXXFLAGS)
 
 run:
-	./$(TARGET)
+	@echo [MAKE] Running $(TARGET)
+	@./$(TARGET)

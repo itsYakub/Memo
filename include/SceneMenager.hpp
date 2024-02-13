@@ -13,7 +13,7 @@ private:
 public:
     static SceneMenager& Get() { static SceneMenager instance; return instance; }
 
-    void LoadScene(std::unique_ptr<Scene> scene);
+    void LoadScene(Scene* scene);
     void UnloadScene();
     void UpdateScene();
     void RenderScene();

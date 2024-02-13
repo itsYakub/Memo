@@ -4,14 +4,13 @@
 #include <cmath>
 #include <algorithm>
 
-#include "MatchTableObject.hpp"
 #include "Window.hpp"
-#include "Timer.hpp"
-#include "Debug.hpp"
-
-#include "SoundMenager.hpp"
-
+#include "MatchTableObject.hpp"
 #include "Settings.hpp"
+
+#include "Timer.hpp"
+
+#include "Debug.hpp"
 
 MatchTable::MatchTable(const MatchTableDifficulty difficulty) : m_MatchTable(), m_Difficulty(difficulty), m_SelectedElements(std::pair<int, int>(0, 0)), m_SelectCount(0), m_DeselectTimer(0.0f) {
     const int diff_value = difficulty;
@@ -31,8 +30,8 @@ MatchTable::MatchTable(const MatchTableDifficulty difficulty) : m_MatchTable(), 
             
             Vector2 position;
             // Formula: position at (0,0) + the center of the screen - the half of the size of the whole table
-            position.x = round((j * MatchTableObject::WIDTH + MatchTableObject::SPACING * j) + (Window::Get().GetRendererCenter().x) - (0.5f * (diff_value_sqrt * MatchTableObject::WIDTH + (diff_value_sqrt - 1) * MatchTableObject::SPACING)));
-            position.y = round((i * MatchTableObject::HEIGHT + MatchTableObject::SPACING * i) + (Window::Get().GetRendererCenter().y) - (0.5f * (diff_value_sqrt * MatchTableObject::HEIGHT + (diff_value_sqrt - 1) * MatchTableObject::SPACING)));
+            position.x = round((j * MatchTableObject::WIDTH + MatchTableObject::SPACING * j) + (Window::Get().GetVirtualCenter().x) - (0.5f * (diff_value_sqrt * MatchTableObject::WIDTH + (diff_value_sqrt - 1) * MatchTableObject::SPACING)));
+            position.y = round((i * MatchTableObject::HEIGHT + MatchTableObject::SPACING * i) + (Window::Get().GetVirtualCenter().y) - (0.5f * (diff_value_sqrt * MatchTableObject::HEIGHT + (diff_value_sqrt - 1) * MatchTableObject::SPACING)));
 
             m_MatchTable.push_back(MatchTableObject(position, random_value, index));
         }

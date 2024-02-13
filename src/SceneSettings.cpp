@@ -1,25 +1,18 @@
 #include "SceneSettings.hpp"
 
-#include <memory>
-
 #include "raylib.h"
 #include "raygui.h"
-
-#include "ResourceMenager.hpp"
 
 #include "SceneMenager.hpp"
 #include "SceneMainMenu.hpp"
 
-#include "SoundMenager.hpp"
-
-#include "Settings.hpp"
-
 #include "ResourceMenager.hpp"
+#include "Settings.hpp"
 
 SceneSettings::SceneSettings() { }
 
 void SceneSettings::Init() {
-    Window::Get().SetRendererBackgroundColor(245, 245, 245);
+    Window::Get().SetVirtualWindowBackgroundColor(245, 245, 245);
 
     m_SettingSection = SECTION_GAMEPLAY;
     m_CurrentSettingSection = m_SettingSection;
@@ -34,12 +27,9 @@ void SceneSettings::Update() {
 }
 
 void SceneSettings::Render() {
-    // TODO: 
-    // - Implement the check for the arrow widgets if the're is an option to go between pages and don't go outside the bounds
-    
     std::string section_name;
 
-    auto& sounds = SoundMenager::Get();
+    auto& resources = ResourceMenager::Get();
     auto& settings = Settings::Get();
      
     switch (m_SettingSection) {
@@ -88,19 +78,19 @@ void SceneSettings::Render() {
 
     GuiLabel(Rectangle { 120, 80, 160, 24 }, section_name.c_str());
 
-    if(--m_CurrentSettingSection < 0) GuiDisable();
+    if(m_CurrentSettingSection - 1 < 0) GuiDisable();
 
     if(GuiButton(Rectangle { 96, 80, 24, 24 }, GuiIconText(ICON_ARROW_LEFT_FILL, nullptr))) {
-        sounds.PlaySoundFromCache("click");
+        resources.PlaySoundByName("click");
         m_CurrentSettingSection--;
     }
 
     GuiEnable();
 
-    if(++m_CurrentSettingSection >= 1) GuiDisable();
+    if(m_CurrentSettingSection + 1 >= LENGTH) GuiDisable();
     
     if(GuiButton(Rectangle { 280, 80, 24, 24 }, GuiIconText(ICON_ARROW_RIGHT_FILL, nullptr))) {
-        sounds.PlaySoundFromCache("click");
+        resources.PlaySoundByName("click");
         m_CurrentSettingSection++;
     }
 
@@ -113,8 +103,8 @@ void SceneSettings::Render() {
     if(GuiButton(Rectangle { 136, 264, 128, 24 }, GuiIconText(ICON_RESTART, "Back"))) {
         settings.SerializeSettings();
 
-        SceneMenager::Get().LoadScene(std::make_unique<SceneMainMenu>());
+        SceneMenager::Get().LoadScene(new SceneMainMenu());
         
-        sounds.PlaySoundFromCache("click");
+        resources.PlaySoundByName("click");
     }
 }

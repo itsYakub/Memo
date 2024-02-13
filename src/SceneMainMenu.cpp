@@ -1,25 +1,21 @@
 #include "SceneMainMenu.hpp"
 
-#include <memory>
-
 #include "raylib.h"
 #include "raygui.h"
 
-#include "Debug.hpp"
 #include "SceneGameplay.hpp"
 #include "SceneMenager.hpp"
 #include "SceneSettings.hpp"
 
 #include "FileSystem.hpp"
-
 #include "ResourceMenager.hpp"
 
-#include "SoundMenager.hpp"
+#include "Debug.hpp"
 
 SceneMainMenu::SceneMainMenu() { }
 
 void SceneMainMenu::Init() {
-    Window::Get().SetRendererBackgroundColor(245, 245, 245);
+    Window::Get().SetVirtualWindowBackgroundColor(245, 245, 245);
     m_MainMenuState = STATE_DEFAULT;
 }
 
@@ -35,7 +31,6 @@ void SceneMainMenu::Render() {
     auto& window = Window::Get();
     auto& scene_menager = SceneMenager::Get();
     auto& resources = ResourceMenager::Get();
-    auto& sound_menager = SoundMenager::Get();
 
     switch(m_MainMenuState) {
         case STATE_DEFAULT:
@@ -53,17 +48,17 @@ void SceneMainMenu::Render() {
 
             if(GuiButton(Rectangle { 136, 136, 128, 24 }, GuiIconText(ICON_PLAYER_PLAY, "Play"))) {
                 m_MainMenuState = STATE_LEVEL_CHOOSING;
-                sound_menager.PlaySoundFromCache("click");
+                resources.PlaySoundByName("click");
             } 
 
             if(GuiButton(Rectangle { 136, 168, 128, 24 }, GuiIconText(ICON_GEAR_BIG, "Settings"))) {
-                scene_menager.LoadScene(std::make_unique<SceneSettings>());
-                sound_menager.PlaySoundFromCache("click");
+                scene_menager.LoadScene(new SceneSettings());
+                resources.PlaySoundByName("click");
             } 
 
             if(GuiButton(Rectangle { 136, 200, 128, 24 }, GuiIconText(ICON_EXIT, "Quit"))) {
                 window.CloseCallback();
-                sound_menager.PlaySoundFromCache("click");
+                resources.PlaySoundByName("click");
             } 
 
             // Other GUI buttons
@@ -91,23 +86,23 @@ void SceneMainMenu::Render() {
             GuiSetStyle(LABEL, TEXT_ALIGNMENT, DEFAULT);
 
             if(GuiButton(Rectangle { 120, 136, 160, 24 }, FileSystem::Get().GetJson()["player"]["level_finish"][0] ? TextFormat("Easy (%.2fs)", (float) FileSystem::Get().GetJson()["player"]["level_best_time"][0]) : "Easy")) {
-                scene_menager.LoadScene(std::make_unique<SceneGameplay>(DIFFICULTY_EASY));
-                sound_menager.PlaySoundFromCache("click");
+                scene_menager.LoadScene(new SceneGameplay(DIFFICULTY_EASY));
+                resources.PlaySoundByName("click");
             } 
 
             if(GuiButton(Rectangle { 120, 168, 160, 24 }, FileSystem::Get().GetJson()["player"]["level_finish"][1] ? TextFormat("Normal (%.2fs)", (float) FileSystem::Get().GetJson()["player"]["level_best_time"][1]) : "Normal")) {
-                scene_menager.LoadScene(std::make_unique<SceneGameplay>(DIFFICULTY_NORMAL));
-                sound_menager.PlaySoundFromCache("click");
+                scene_menager.LoadScene(new SceneGameplay(DIFFICULTY_NORMAL));
+                resources.PlaySoundByName("click");
             } 
 
             if(GuiButton(Rectangle { 120, 200, 160, 24 }, FileSystem::Get().GetJson()["player"]["level_finish"][2] ? TextFormat("Hard (%.2fs)", (float) FileSystem::Get().GetJson()["player"]["level_best_time"][2]) : "Hard")) {
-                scene_menager.LoadScene(std::make_unique<SceneGameplay>(DIFFICULTY_HARD));
-                sound_menager.PlaySoundFromCache("click");
+                scene_menager.LoadScene(new SceneGameplay(DIFFICULTY_HARD));
+                resources.PlaySoundByName("click");
             } 
 
             if(GuiButton(Rectangle { 120, 232, 160, 24 }, GuiIconText(ICON_RESTART, "Back"))) {
                 m_MainMenuState = STATE_DEFAULT;
-                sound_menager.PlaySoundFromCache("click");
+                resources.PlaySoundByName("click");
             } 
 
             break;

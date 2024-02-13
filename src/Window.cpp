@@ -9,19 +9,21 @@
 #define MIN(a, b) ((a) <( b) ? (a) : (b))
 
 float GetBufferScaling(Window& window) {
-    return MIN((float) GetScreenWidth() / window.GetRendererSize().x, (float) GetScreenHeight() / window.GetRendererSize().y);
+    return MIN((float) GetScreenWidth() / window.GetVirtualSize().x, (float) GetScreenHeight() / window.GetVirtualSize().y);
 }
 
 Window::Window() {
+    SetTraceLogLevel(LOG_NONE);
+
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     SetConfigFlags(FLAG_VSYNC_HINT);
 
     InitWindow(1280, 960, TextFormat("Raylib %s - Memo - Version 1.0.0", RAYLIB_VERSION));
+    InitAudioDevice();
 
     SetExitKey(0);
 
     GuiLoadStyleDefault();
-    GuiEnableTooltip();
     GuiLoadIcons("res/rguiicons/icon_set.rgi", true);
 
     MaximizeWindow();
@@ -44,10 +46,43 @@ Window::Window() {
 Window::~Window() {
     Debug::Log("Closing window...");
 
-    GuiDisableTooltip();
-
     UnloadRenderTexture(m_RendererTarget);
+
+    CloseAudioDevice();
     CloseWindow();
+}
+
+Vector2 Window::GetVirtualMousePosition() {
+    return m_VirtualMousePosition;
+}
+
+Vector2 Window::GetVirtualSize() {
+     return (Vector2) { m_VirtualScreenWidth, m_VirtualScreenHeight }; 
+}
+
+Vector2 Window::GetVirtualCenter() {
+     return (Vector2) { m_VirtualScreenWidth / 2, m_VirtualScreenHeight / 2 }; 
+}
+
+bool Window::ShouldClose() {
+     return WindowShouldClose() || close_callback; 
+}
+
+void Window::CloseCallback() {
+     close_callback = true; 
+}
+
+void Window::SetVirtualWindowBackgroundColor(unsigned char r, unsigned char g, unsigned char b) {
+     this->m_RendererColor = Color { r, g ,b, 255 }; 
+}
+
+void Window::InitRenderBuffer() {
+    BeginTextureMode(m_RendererTarget); 
+    ClearBackground(m_RendererColor); 
+}
+
+void Window::CloseRenderBuffer() {
+     EndTextureMode(); 
 }
 
 void Window::Update() {

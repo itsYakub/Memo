@@ -23,23 +23,16 @@
 // OR OTHER DEALINGS IN THE SOFTWARE.
 // ==============================================================================
 
-#include <memory>
-
 #include "Window.hpp"
-#include "MatchTable.hpp"
-
-#include "Debug.hpp"
 
 #include "SceneMenager.hpp"
 #include "SceneSplashScreen.hpp"
 
-#include "SoundMenager.hpp"
-
+#include "Settings.hpp"
+#include "FileSystem.hpp"
 #include "ResourceMenager.hpp"
 
-#include "Settings.hpp"
-
-#include "FileSystem.hpp"
+#include "Debug.hpp"
 
 // TODO:
 // - bug-fix, code clean-up / optimizations
@@ -49,7 +42,6 @@ class Game {
 private:
     Window& window = Window::Get();
     SceneMenager& scene_menager = SceneMenager::Get();
-    SoundMenager& sound_menager = SoundMenager::Get();
     ResourceMenager& resource_menager = ResourceMenager::Get();
     FileSystem& file_system = FileSystem::Get();
 
@@ -59,16 +51,16 @@ public:
 
         file_system.DeserializeJson();
 
-        sound_menager.LoadSoundToCache("res/sfx/kenney_ui-audio/Audio/click1.ogg", "click");
-
         resource_menager.InsertFont("res/font/Peaberry-Font-v2.0/Peaberry Font Family/Peaberry Base/PeaberryBase.ttf");
+
+        resource_menager.InsertSound("res/sfx/kenney_ui-audio/Audio/click1.ogg", "click");
 
         resource_menager.InsertTexture("res/txt/raylib_128x128.png", "raylib_logo");
         resource_menager.InsertTexture("res/txt/table_card_back.png", "table_card_back");
         resource_menager.InsertTexture("res/txt/table_card_front.png", "table_card_front");
         resource_menager.InsertTexture("res/txt/table_background_main.png", "background");
 
-        scene_menager.LoadScene(std::make_unique<SceneSplashScreen>());
+        scene_menager.LoadScene(new SceneSplashScreen());
 
         while(!window.ShouldClose()) {
             Update();
@@ -89,11 +81,11 @@ private:
     }
 
     void Render() {
-        window.RendererBegin();
+        window.InitRenderBuffer();
         
         scene_menager.RenderScene();
 
-        window.RendererEnd();
+        window.CloseRenderBuffer();
 
         window.Draw();
     }

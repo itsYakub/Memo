@@ -3,9 +3,9 @@
 #include "raylib.h"
 
 #include "Window.hpp"
-#include "Debug.hpp"
-
 #include "ResourceMenager.hpp"
+
+#include "Debug.hpp"
 
 MatchTableObject::MatchTableObject(Vector2 position, int ID, int index) : m_Position(position), m_IsSelected(false), m_IsPicked(false), m_ID(ID), m_Index(index) {
 

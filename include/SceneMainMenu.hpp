@@ -1,7 +1,5 @@
 #pragma once
 
-#include <array>
-
 #include "Scene.hpp"
 
 class SceneMainMenu : public Scene {    

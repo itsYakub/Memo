@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 enum SettingList {
     GAMEPLAY_DISPLAY_TIME,
     GAMEPLAY_COUNTDOWN_AT_THE_BEGINNING,
