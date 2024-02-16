@@ -6,10 +6,6 @@
 # > debug (default)
 # > release
 # ===============================================================================
-# Build platform (PLATFORM):
-# > windows (default)
-# > linux
-# ===============================================================================
 # Project's Licence:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -31,28 +27,32 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 # ===============================================================================
 
-PLATFORM ?= windows
 MODE ?= debug
-
-ifeq ($(MODE), debug)
-	BUILD_DIR = bin
-endif
-ifeq ($(MODE), release) 
-	BUILD_DIR = game
-endif
 
 # Compiler used by the project
 CXX = g++
 
 # Default compilation flags
-CXXFLAGS = -std=c++20
+CXXFLAGS = \
+	-std=c++20 \
+	-static-libgcc \
+	-static-libstdc++
 
 # Add the compilation flags based on the build mode
 ifeq ($(MODE), debug)
-	@CXXFLAGS += -g -Wall -Wextra
+	CXXFLAGS += \
+		-g \
+		-Wall \
+		-Wextra
+
+	BUILD_DIR = bin
 endif
 ifeq ($(MODE), release) 
-	@CXXFLAGS += -s -O2 -static-libgcc -static-libstdc++
+	CXXFLAGS += \
+		-s \
+		-O3
+
+	BUILD_DIR = game
 endif
 
 # Project's source files
@@ -60,22 +60,27 @@ SRCS = $(wildcard src/*.cpp)
 
 # Project's include directories
 # Make sure to provide the valid paths to the raylib's and raygui's include directories
-IXXFLAGS = -Iinclude -Ilib/raylib/src -Ilib/raygui/src -Ilib/json/single_include/nlohmann
+IXXFLAGS = \
+	-Iinclude \
+	-Ilib/raylib/src \
+	-Ilib/raygui/src \
+	-Ilib/json/single_include/nlohmann
 
 # Project's library directories
 # Make sure to provide the valid path to the project's libraries
 LDFLAGS = -Llib
 
-# Project's libraries
+# Project's libraries & executable setup
 # Make sure to compile the raylib to the STATIC library before running
 # Doing otherwise will cause an error
-ifeq ($(PLATFORM), windows)
-	LXXFLAGS = -lraylib -lgdi32 -lwinmm -lopengl32
-	BUILD_EXT = exe
-endif
-ifeq ($(PLATFORM), linux) 
+# If uname = Linux then the platform is LINUX
+ifeq ($(shell uname), Linux) 
 	LXXFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 	BUILD_EXT = out
+# Otherwise the platform is WINDOWS
+else
+	LXXFLAGS = -lraylib -lgdi32 -lwinmm -lopengl32
+	BUILD_EXT = exe
 endif
 
 # Project's binary files (.obj)

@@ -7,7 +7,7 @@
 
 ## About❗️
 
-<b>Memo</b> is the match-pair game in which you're challenged to find the pairs of numeric cards on 4x4, 6x6 od 8x8 grid.
+<b>Memo</b> is the match-pair game in which you're challenged to find the pairs of numeric cards on 4x4, 6x6 and 8x8 grid.
 
 ## Prerequesites 📜
 - <b>Valid operating system:</b> Currently <b>Memo</b> is available only on `Windows` and `Linux`.
@@ -42,23 +42,7 @@ make all MODE=debug
 make all MODE=release
 ```
 
-- If you want to target the `Windows` platform, use command:
-```bash
-make all PLATFORM=windows
-```
-
-- If you want to target the `Linux` platform, use command:
-```bash
-make all PLATFORM=linux
-```
-
-- If you want to combine all the parameters to get the build you want, use command:
-```bash
-make all PLATFORM={{Your Platform}} MODE={{Build Mode}}
-```
-
 The default parameters of the Makefile are:
-- <b>PLATFORM:</b> windows;
 - <b>MODE:</b> debug;
 
 ## Credits 📖
