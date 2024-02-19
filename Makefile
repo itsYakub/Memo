@@ -35,8 +35,6 @@ CXX = g++
 # Default compilation flags
 CXXFLAGS = \
 	-std=c++20 \
-	-static-libgcc \
-	-static-libstdc++
 
 # Add the compilation flags based on the build mode
 ifeq ($(MODE), debug)
@@ -76,10 +74,12 @@ LDFLAGS = -Llib
 # If uname = Linux then the platform is LINUX
 ifeq ($(shell uname), Linux) 
 	LXXFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+	CXXFLAGS += -static-libgcc -static-libstdc++
 	BUILD_EXT = out
 # Otherwise the platform is WINDOWS
 else
 	LXXFLAGS = -lraylib -lgdi32 -lwinmm -lopengl32
+	CXXFLAGS += -static-libgcc -static-libstdc++ -static -mwindows
 	BUILD_EXT = exe
 endif
 
