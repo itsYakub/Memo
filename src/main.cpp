@@ -92,7 +92,7 @@ private:
 };
 
 int main(int, char**) {
-    Game();
+    Game game = Game();
 
     return(0);
 }
